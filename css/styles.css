@@ -272,7 +272,6 @@ p:last-child{margin-bottom:0}
   transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s var(--ease);
 }
 .practice-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--gold)}
-.practice-card span{color:var(--gold-deep);font-size:.75rem;font-weight:700;letter-spacing:.16em}
 .practice-card h3{margin:var(--s-4) 0 var(--s-1)}
 .practice-card p{color:var(--muted);font-size:.95rem;margin:0;max-width:34ch}
 .practice-card b{
@@ -544,7 +543,12 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
   .nav-actions .button{display:none}
   .phone span{display:none}
 
-  .card-grid,.steps,.values{grid-template-columns:1fr}
+  .card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-2)}
+  .practice-card{min-height:0;padding:var(--s-3)}
+  .practice-card h3{font-size:1.1rem;margin:var(--s-2) 0 var(--s-1)}
+  .practice-card p{font-size:.82rem;line-height:1.45}
+  .practice-card b{padding-top:var(--s-2);font-size:.75rem}
+  .steps,.values{grid-template-columns:1fr}
   .split{grid-template-columns:1fr}
   .value{border-right:0;border-bottom:1px solid var(--line);text-align:left}
   .value:last-child{border-bottom:0}
