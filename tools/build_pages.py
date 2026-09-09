@@ -423,6 +423,7 @@ def build_hub():
 
   <section class="section-tight">
     <div class="shell">
+      <h2 class="sr-only">Practice areas</h2>
       <div class="card-grid">
 {cards}
       </div>

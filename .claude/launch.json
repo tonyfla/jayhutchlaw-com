@@ -4,8 +4,8 @@
     {
       "name": "jayhutchlaw",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8788"],
-      "port": 8788
+      "runtimeArgs": ["tools/serve.py", "8789"],
+      "port": 8789
     }
   ]
 }

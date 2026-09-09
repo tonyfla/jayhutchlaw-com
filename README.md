@@ -30,8 +30,12 @@ robots.txt sitemap.xml
 ## Local preview
 
 ```bash
-python3 -m http.server 8788
+python3 tools/serve.py 8789
 ```
+
+Serves directory-style URLs and sends `no-store`, so an edited stylesheet is
+actually picked up on reload. `python3 -m http.server` caches aggressively and
+will quietly show you stale CSS.
 
 The static site works, but `/api/lead` will not — form submissions show their
 error state. To exercise the function you need Wrangler:
@@ -100,6 +104,9 @@ CAPTCHAs measurably reduce law-firm form completion.
 
 ## Conventions worth knowing
 
+- **Tap targets are 44px on mobile** for the phone link, footer links, and
+  breadcrumbs. Calling is the primary conversion action; do not shrink these.
+- **`--muted-light` is the floor for text colour.** Anything lighter fails AA.
 - **`--gold` is decorative only.** `#b38a4d` is 3.4:1 on white and fails WCAG AA
   for text. Use `--gold-deep` for anything readable or clickable.
 - **`--gold-deep` is reserved for calls to action.** Using it as a decorative
@@ -146,7 +153,8 @@ hand-written and are not touched by the generators.
 - Real photography: hero and an attorney portrait (`attorney/` still shows a
   placeholder block).
 - Convert the hero to WebP — no encoder was available on the build machine, so
-  it currently ships as a 384 KB JPEG.
+  it ships as JPEG (376 KB desktop / 128 KB mobile). WebP would roughly halve
+  both; it is the largest remaining performance item.
 - Confirm bar admissions and any credentials worth listing.
 - Google Business Profile using the exact NAP block in
   `marketing/copy/firm-boilerplate.md`.

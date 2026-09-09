@@ -140,10 +140,30 @@
   }
 
   /* --- Submission ------------------------------------------------- */
+  var errorSlotSeq = 0;
+
+  /* Link every input to its error slot with aria-describedby.
+     aria-invalid alone tells a screen reader something is wrong but not what;
+     without this the message is visible only to sighted users. */
+  function associateErrors(form) {
+    form.querySelectorAll('.field').forEach(function (field) {
+      var slot = field.querySelector('.field-error');
+      var input = field.querySelector('input, textarea, select');
+      if (!slot || !input) return;
+
+      if (!slot.id) slot.id = 'err-' + (++errorSlotSeq);
+
+      var described = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+      if (described.indexOf(slot.id) === -1) described.push(slot.id);
+      input.setAttribute('aria-describedby', described.join(' '));
+    });
+  }
+
   function wireForm(form) {
     var loadedAt = Date.now();
     var submitting = false;
 
+    associateErrors(form);
     wireUploads(form);
 
     form.querySelectorAll('input, textarea, select').forEach(function (input) {
