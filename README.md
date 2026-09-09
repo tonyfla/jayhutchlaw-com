@@ -22,7 +22,7 @@ js/forms.js           attribution, validation, spam screening, submission
 functions/api/lead.js Cloudflare Pages Function → Clio Grow inbox_leads
 assets/               hero imagery, self-hosted fonts, favicon
 marketing/            internal marketing repo — NOT deployed (see .cfignore)
-marketing/ads/        social ad creative, copy, and tagged links
+marketing/ads/        social ad files, one folder per ad
 _headers _redirects   Cloudflare configuration
 robots.txt sitemap.xml
 ```
@@ -128,11 +128,10 @@ python3 tools/build_firm_pages.py   # attorney + upload-citation
 python3 tools/build_resources.py    # resources hub + guides
 ```
 
-Ad library (not part of the site build):
+Ad links (not part of the site build):
 
 ```bash
-python3 tools/ads.py new meta dui-atlanta v1 --page /practice-areas/dui-defense/
-python3 tools/ads.py check
+python3 tools/adlink.py dui-atlanta /practice-areas/dui-defense/
 ```
 
 Practice-area copy lives in `tools/content.py`; guide copy in
