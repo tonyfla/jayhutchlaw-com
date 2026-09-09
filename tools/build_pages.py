@@ -14,6 +14,11 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content import PAGES, HUB, BY_SLUG, FIRM  # noqa: E402
+from resources import GUIDES  # noqa: E402
+
+# Inverted from each guide's own related_practice, so a guide added or
+# repointed in tools/resources.py updates the practice pages automatically.
+GUIDE_FOR_PRACTICE = {g["related_practice"][0]: g for g in GUIDES}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = FIRM["base"]
@@ -102,6 +107,18 @@ def breadcrumb(trail):
 
 
 def sidebar_form(page):
+    guide = GUIDE_FOR_PRACTICE.get(page["slug"])
+    guide_card = ""
+    if guide:
+        guide_card = f"""
+  <div class="aside-card">
+    <p class="eyebrow">Free guide</p>
+    <h2>{html.escape(guide['nav'])}</h2>
+    <p class="form-note" style="margin-bottom:1rem">{html.escape(guide['read_time'])} · free to read, no form</p>
+    <a class="button button-outline full" href="/resources/{guide['slug']}/">Read the guide →</a>
+  </div>
+"""
+
     return f"""<aside class="page-aside">
   <div class="aside-card">
     <p class="eyebrow">Free consultation</p>
@@ -155,7 +172,7 @@ def sidebar_form(page):
     <a class="aside-phone" href="tel:{TEL}">☎ {PHONE}</a>
     <p class="form-note">Atlanta, Georgia · Serving clients statewide</p>
   </div>
-</aside>
+{guide_card}</aside>
 """
 
 
