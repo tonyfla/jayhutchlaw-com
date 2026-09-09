@@ -126,6 +126,7 @@ data. Rather than editing that chrome in nine files, it lives in one template:
 python3 tools/build_pages.py        # practice-areas hub + 6 deep pages
 python3 tools/build_firm_pages.py   # attorney + upload-citation
 python3 tools/build_resources.py    # resources hub + guides
+python3 tools/build_legal.py        # privacy + disclaimer
 ```
 
 Ad links (not part of the site build):
@@ -139,13 +140,16 @@ Practice-area copy lives in `tools/content.py`; guide copy in
 regenerate — hand edits to the generated `index.html` files will be overwritten.**
 The generated HTML is committed and deploys as-is; Cloudflare runs no build step.
 
-`index.html`, `privacy/`, `disclaimer/`, `thank-you/`, and `404.html` are
-hand-written and are not touched by the generators.
+`index.html`, `thank-you/`, and `404.html` are hand-written and are not touched
+by the generators. Legal copy lives in `tools/build_legal.py`.
 
 ## Still to do
 
-- **Legal review of all practice-area copy.** Every page in `tools/content.py`
-  is marked DRAFT. Georgia code references (O.C.G.A. § 9-3-33, § 51-12-33,
+- **Legal review.** Practice-area copy in `tools/content.py`, guides in
+  `tools/resources.py`, and the privacy policy and disclaimer in
+  `tools/build_legal.py` are all DRAFT. Open questions for counsel are listed
+  in `marketing/copy/legal-review-notes.md`.
+- **Every page in `tools/content.py` is marked DRAFT.** Georgia code references (O.C.G.A. § 9-3-33, § 51-12-33,
   § 51-3-1, § 40-6-189) are cited so they can be checked quickly.
 - Decide whether to switch the resource gate on (see below).
 - Attorney review of `privacy/` and `disclaimer/` — **launch blockers.**
