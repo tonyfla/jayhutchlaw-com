@@ -10,7 +10,21 @@ pages_build_output_dir = "."
 binding = "UPLOADS"
 bucket_name = "jayhutchlaw-uploads"
 
+# Limit each visitor to three intake attempts per minute. The namespace ID is
+# intentionally unique to this project and must not be reused by another Worker.
+[[ratelimits]]
+name = "LEAD_RATE_LIMITER"
+namespace_id = "7331001"
+
+  [ratelimits.simple]
+  limit = 3
+  period = 60
+
+# Configure and verify the sender domain in Cloudflare Email Service, then set
+# NOTIFY_EMAIL and NOTIFY_FROM_EMAIL in the Pages dashboard.
+[[send_email]]
+name = "EMAIL"
+
 [vars]
 CLIO_REGION = "us"
-# PUBLIC_UPLOAD_BASE is set per-environment in the Cloudflare dashboard.
 # CLIO_GROW_TOKEN is a secret — never put it here.

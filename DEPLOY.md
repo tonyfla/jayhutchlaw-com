@@ -211,16 +211,23 @@ source attached, so you cannot tell which campaign produced them.
 | `CLIO_GROW_TOKEN` | your token | **Encrypted** |
 | `CLIO_REGION` | `us` | Plain text |
 | `CLIO_LOCATION_ID` | from `/grow/locations` | Plain text |
-| `PUBLIC_UPLOAD_BASE` | **leave unset** — see step 3 | — |
+| `NOTIFY_EMAIL` | the firm's intake inbox | Plain text |
+| `NOTIFY_FROM_EMAIL` | verified Cloudflare Email Service sender | Plain text |
 
 `CLIO_GROW_TOKEN` must be set as **Encrypted**, not plain text. Plain-text
 variables are readable by anyone with dashboard access.
+
+Also configure the `EMAIL` send binding in Cloudflare Email Service and verify
+the sender domain before testing. When Clio is unavailable or not yet
+configured, the function sends the intake inbox the lead details instead of
+writing them to logs. Citation uploads remain private in R2; the fallback email
+contains their object keys rather than attachments.
 
 **Redeploy after adding variables.** They are read at request time, but the
 deployment must be re-triggered to pick up new bindings: **Deployments →
 latest → Retry deployment**.
 
-- [ ] Variables set, token encrypted
+- [ ] Variables set, token encrypted, email sender verified
 - [ ] Redeployed
 
 ---

@@ -48,7 +48,8 @@ Put local secrets in `.dev.vars` (gitignored):
 
 ```
 CLIO_GROW_TOKEN=...
-PUBLIC_UPLOAD_BASE=https://uploads.jayhutchlaw.com
+NOTIFY_EMAIL=intake@jayhutchlaw.com
+NOTIFY_FROM_EMAIL=website@jayhutchlaw.com
 ```
 
 ## Deploying
@@ -63,10 +64,12 @@ PUBLIC_UPLOAD_BASE=https://uploads.jayhutchlaw.com
    | `CLIO_GROW_TOKEN` | secret | from the Clio developer portal |
    | `CLIO_REGION` | plain | `us` |
    | `CLIO_LOCATION_ID` | plain | optional, Grow location id |
-   | `PUBLIC_UPLOAD_BASE` | plain | public URL of the R2 bucket |
+   | `NOTIFY_EMAIL` | plain | inbox for CRM-delivery fallback |
+   | `NOTIFY_FROM_EMAIL` | plain | verified Cloudflare Email Service sender |
 
-5. Bind the R2 bucket to `UPLOADS` in the Pages project settings.
-6. Point DNS at Cloudflare. The existing Wix site stays live until this step,
+5. Bind the R2 bucket to `UPLOADS` in the Pages project settings. Keep it private: the CRM receives object keys, never public file URLs.
+6. Configure the `EMAIL` send binding in Cloudflare Email Service and verify `NOTIFY_FROM_EMAIL`. This sends the intake inbox a copy only when Clio cannot accept a lead.
+7. Point DNS at Cloudflare. The existing Wix site stays live until this step,
    so there is no risky cutover.
 
 ## Clio Grow integration

@@ -196,7 +196,6 @@
       clearStatus(form);
 
       var payload = new FormData(form);
-      if (hp) payload.delete(hp.name);
       payload.append('_attribution', JSON.stringify(attribution));
       payload.append('_page', location.href);
       payload.append('_source', form.dataset.source || 'website');

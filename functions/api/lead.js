@@ -13,11 +13,12 @@
  *   CLIO_GROW_TOKEN     secret. API token from the Clio developer portal.
  *   CLIO_REGION         optional: us | eu | au | ca   (default: us)
  *   CLIO_LOCATION_ID    optional: Grow location id for the Atlanta office
- *   NOTIFY_EMAIL        optional: fallback inbox if Clio rejects the lead
+ *   NOTIFY_EMAIL        recipient for the email fallback
+ *   NOTIFY_FROM_EMAIL   verified sender for the email fallback
  *
  * Bindings:
- *   UPLOADS             R2 bucket for citation attachments
- *   PUBLIC_UPLOAD_BASE  public URL base for that bucket
+ *   UPLOADS             private R2 bucket for citation attachments
+ *   EMAIL               Cloudflare Email Service send binding
  *
  * NOTE: the auth scheme below (Bearer) still needs confirming against a live
  * Clio developer-portal token — the public docs do not spell out the header.
@@ -44,6 +45,8 @@ const MARKETING_SOURCE_IDS = {
 
 const MAX_FILES = 4;
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
+const MAX_REQUEST_BYTES = MAX_FILES * MAX_FILE_BYTES + 1024 * 1024;
+const MIN_FILL_SECONDS = 3;
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/heic', 'image/webp', 'application/pdf'];
 
 const json = (data, status = 200) =>
@@ -54,7 +57,65 @@ const json = (data, status = 200) =>
 
 const clean = (v, max = 2000) => String(v ?? '').trim().slice(0, max);
 
+const bytesStartWith = (bytes, signature) =>
+  signature.every((byte, index) => bytes[index] === byte);
+
+async function detectedFileType(file) {
+  const bytes = new Uint8Array(await file.slice(0, 32).arrayBuffer());
+  if (bytesStartWith(bytes, [0xff, 0xd8, 0xff])) return 'image/jpeg';
+  if (bytesStartWith(bytes, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) return 'image/png';
+  if (bytesStartWith(bytes, [0x25, 0x50, 0x44, 0x46, 0x2d])) return 'application/pdf';
+  if (bytesStartWith(bytes, [0x52, 0x49, 0x46, 0x46]) && bytesStartWith(bytes.slice(8), [0x57, 0x45, 0x42, 0x50])) return 'image/webp';
+
+  const brand = new TextDecoder().decode(bytes.slice(4, 12));
+  if (/^ftyp(?:heic|heix|hevc|hevx|mif1|msf1)$/.test(brand)) return 'image/heic';
+  return null;
+}
+
+async function sendFallbackEmail(env, lead, reason) {
+  if (!env.EMAIL || !env.NOTIFY_EMAIL || !env.NOTIFY_FROM_EMAIL) return false;
+
+  try {
+    await env.EMAIL.send({
+      to: env.NOTIFY_EMAIL,
+      from: env.NOTIFY_FROM_EMAIL,
+      replyTo: lead.email || undefined,
+      subject: `Jay Hutch Law website lead - CRM delivery failed (${reason})`,
+      text: [
+        'A website lead could not be delivered to Clio Grow.',
+        `Reason: ${reason}`,
+        '',
+        `Name: ${lead.first_name} ${lead.last_name}`,
+        lead.email ? `Email: ${lead.email}` : '',
+        lead.phone_number ? `Phone: ${lead.phone_number}` : '',
+        '',
+        lead.from_message,
+      ].filter(Boolean).join('\n'),
+    });
+    return true;
+  } catch (error) {
+    console.error('Lead fallback email failed:', error?.code || 'unknown_error');
+    return false;
+  }
+}
+
 export async function onRequestPost({ request, env }) {
+  const contentLength = Number(request.headers.get('content-length'));
+  if (Number.isFinite(contentLength) && contentLength > MAX_REQUEST_BYTES) {
+    return json({ ok: false, message: 'The submission is too large.' }, 413);
+  }
+
+  const origin = request.headers.get('origin');
+  if (origin && origin !== new URL(request.url).origin) {
+    return json({ ok: false, message: 'This submission is not allowed.' }, 403);
+  }
+
+  if (env.LEAD_RATE_LIMITER) {
+    const visitor = request.headers.get('cf-connecting-ip') || 'unknown';
+    const { success } = await env.LEAD_RATE_LIMITER.limit({ key: visitor });
+    if (!success) return json({ ok: false, message: 'Please wait a moment before trying again.' }, 429);
+  }
+
   let form;
   try {
     form = await request.formData();
@@ -68,6 +129,17 @@ export async function onRequestPost({ request, env }) {
   const email = clean(form.get('email'), 200);
   const phone = clean(form.get('phone'), 50);
   const message = clean(form.get('message'), 5000);
+
+  if (clean(form.get('company'), 200)) {
+    return json({ ok: false, message: 'Could not process the submission.' }, 422);
+  }
+  const elapsed = Number(form.get('_elapsed'));
+  if (!Number.isFinite(elapsed) || elapsed < MIN_FILL_SECONDS || elapsed > 4 * 60 * 60) {
+    return json({ ok: false, message: 'Please wait a moment and try again.' }, 422);
+  }
+  if (form.get('consent') !== 'yes') {
+    return json({ ok: false, message: 'Consent to contact is required.' }, 422);
+  }
 
   if (!firstName || !lastName) {
     return json({ ok: false, message: 'First and last name are required.' }, 422);
@@ -105,7 +177,8 @@ export async function onRequestPost({ request, env }) {
       uploadErrors.push(`${file.name} exceeded the 10 MB limit and was not attached.`);
       continue;
     }
-    if (file.type && !ALLOWED_TYPES.includes(file.type)) {
+    const fileType = await detectedFileType(file);
+    if (!fileType || !ALLOWED_TYPES.includes(fileType)) {
       uploadErrors.push(`${file.name} is not an accepted file type and was not attached.`);
       continue;
     }
@@ -119,11 +192,10 @@ export async function onRequestPost({ request, env }) {
 
     try {
       await env.UPLOADS.put(key, file.stream(), {
-        httpMetadata: { contentType: file.type || 'application/octet-stream' },
-        customMetadata: { submittedBy: `${firstName} ${lastName}`, email, phone },
+        httpMetadata: { contentType: fileType },
+        customMetadata: { intake: 'citation' },
       });
-      const base = (env.PUBLIC_UPLOAD_BASE || '').replace(/\/$/, '');
-      uploaded.push(base ? `${base}/${key}` : key);
+      uploaded.push(key);
     } catch (err) {
       uploadErrors.push(`${file.name} could not be stored (${err.message}).`);
     }
@@ -181,12 +253,13 @@ export async function onRequestPost({ request, env }) {
 
   /* --- Send -------------------------------------------------------------- */
   if (!env.CLIO_GROW_TOKEN) {
-    // Not configured yet. Log it so nothing is lost during the build phase,
-    // and tell the visitor the truth rather than showing a fake success.
-    console.log('CLIO_GROW_TOKEN missing. Lead received:', JSON.stringify(lead));
+    const emailed = await sendFallbackEmail(env, lead, 'CRM credentials are not configured');
+    console.error('Clio Grow is not configured; fallback email:', emailed ? 'sent' : 'unavailable');
     return json(
-      { ok: false, message: 'The intake system is not connected yet. Please call 855-488-2452.' },
-      503
+      emailed
+        ? { ok: true, warnings: ['Our intake system is being connected. Your request was sent to the firm directly.'] }
+        : { ok: false, message: 'The intake system is not connected yet. Please call 855-488-2452.' },
+      emailed ? 200 : 503
     );
   }
 
@@ -203,16 +276,26 @@ export async function onRequestPost({ request, env }) {
       },
       body: JSON.stringify({ data: lead }),
     });
-  } catch (err) {
-    console.error('Clio Grow unreachable:', err.message, JSON.stringify(lead));
-    return json({ ok: false, message: 'We could not reach our intake system. Please call 855-488-2452.' }, 502);
+  } catch {
+    const emailed = await sendFallbackEmail(env, lead, 'Clio Grow could not be reached');
+    console.error('Clio Grow request failed; fallback email:', emailed ? 'sent' : 'unavailable');
+    return json(
+      emailed
+        ? { ok: true, warnings: ['Your request was sent to the firm directly.'] }
+        : { ok: false, message: 'We could not reach our intake system. Please call 855-488-2452.' },
+      emailed ? 200 : 502
+    );
   }
 
   if (!response.ok) {
-    const body = await response.text().catch(() => '');
-    // Log the full lead so a CRM outage never silently loses a client.
-    console.error(`Clio Grow ${response.status}: ${body}`, JSON.stringify(lead));
-    return json({ ok: false, message: 'We could not record your request. Please call 855-488-2452.' }, 502);
+    const emailed = await sendFallbackEmail(env, lead, `Clio Grow returned HTTP ${response.status}`);
+    console.error(`Clio Grow returned HTTP ${response.status}; fallback email:`, emailed ? 'sent' : 'unavailable');
+    return json(
+      emailed
+        ? { ok: true, warnings: ['Your request was sent to the firm directly.'] }
+        : { ok: false, message: 'We could not record your request. Please call 855-488-2452.' },
+      emailed ? 200 : 502
+    );
   }
 
   const created = await response.json().catch(() => ({}));
