@@ -168,9 +168,12 @@ by the generators. Legal copy lives in `tools/build_legal.py`.
   ended up covering the photo. If a portrait belongs there later, it needs a
   cut-out on a transparent background so it can sit against the skyline rather
   than in a frame competing with the citation card.
-- Convert the hero to WebP — no encoder was available on the build machine, so
-  it ships as JPEG (376 KB desktop / 128 KB mobile). WebP would roughly halve
-  both; it is the largest remaining performance item.
+- Images ship as WebP with JPEG fallbacks, via `image-set()` inside an
+  `@supports` block. Regenerate with Pillow, which handles WebP including
+  alpha:
+  `Image.open(src).save(dst, "WEBP", quality=82, method=6)`.
+  Keep the JPEGs: they are the fallback and the `og:image`, since some social
+  platforms still handle WebP poorly.
 - Confirm bar admissions and any credentials worth listing.
 - Google Business Profile using the exact NAP block in
   `marketing/copy/firm-boilerplate.md`.

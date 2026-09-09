@@ -213,7 +213,7 @@ p:last-child{margin-bottom:0}
 /* --- 7. Hero ------------------------------------------------------------- */
 .home-hero{
   position:relative;display:flex;align-items:center;
-  min-height:min(88vh,700px);color:#fff;
+  min-height:min(88vh,700px);color:#fff;overflow:hidden;
   background:
     linear-gradient(92deg,rgba(5,22,45,.93) 0%,rgba(5,22,45,.74) 48%,rgba(5,22,45,.42) 100%),
     url("../assets/hero-atlanta.jpg") center/cover no-repeat;
@@ -221,16 +221,50 @@ p:last-child{margin-bottom:0}
 /* 376 KB desktop hero -> 128 KB on phones, where it matters most. */
 @media (max-width:900px){
   .home-hero{
-    background-image:
-      linear-gradient(92deg,rgba(5,22,45,.93) 0%,rgba(5,22,45,.74) 48%,rgba(5,22,45,.42) 100%),
-      url("../assets/hero-atlanta-mobile.jpg");
+    background-image:linear-gradient(92deg,rgba(5,22,45,.93) 0%,rgba(5,22,45,.74) 48%,rgba(5,22,45,.42) 100%),url("../assets/hero-atlanta-mobile.jpg");
   }
 }
-.hero-layout{
-  display:grid;grid-template-columns:1.12fr .78fr;
-  gap:clamp(2.5rem,5vw,5.5rem);align-items:center;
-  padding-block:clamp(3rem,7vw,5rem);
+/* WebP where supported: 375->176 KB desktop, 127->63 KB mobile. The JPEG
+   declarations above remain the fallback for anything that cannot decode it. */
+@supports (background-image:image-set(url("x.webp") type("image/webp"))){
+  .home-hero{
+    background-image:
+      linear-gradient(92deg,rgba(5,22,45,.93) 0%,rgba(5,22,45,.74) 48%,rgba(5,22,45,.42) 100%),
+      image-set(url("../assets/hero-atlanta.webp") type("image/webp"),
+                url("../assets/hero-atlanta.jpg") type("image/jpeg"));
+  }
+  @media (max-width:900px){
+    .home-hero{
+      background-image:
+        linear-gradient(92deg,rgba(5,22,45,.93) 0%,rgba(5,22,45,.74) 48%,rgba(5,22,45,.42) 100%),
+        image-set(url("../assets/hero-atlanta-mobile.webp") type("image/webp"),
+                  url("../assets/hero-atlanta-mobile.jpg") type("image/jpeg"));
+    }
+  }
 }
+
+/* Two columns of content, copy | card, with the cut-out taken out of flow
+   and anchored to the hero's bottom edge behind the card. In the grid it
+   reserved a track and squeezed the headline onto three lines; out of flow it
+   costs the layout nothing and reads as a figure standing in the scene.
+   The right offset keeps his shoulder tucked ~90px behind the card whatever
+   the viewport width. */
+.hero-layout{
+  display:grid;grid-template-columns:1fr minmax(280px,340px);
+  gap:clamp(1.5rem,3vw,3.5rem);align-items:center;
+  padding-block:clamp(3rem,6vw,4.5rem);
+  position:relative;z-index:2;
+}
+.hero-copy{max-width:640px}
+.hero-figure{
+  position:absolute;bottom:0;z-index:1;pointer-events:none;
+  right:calc(max(var(--gutter),(100vw - 1320px) / 2) + 250px);
+  height:min(72vh,560px);
+  filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));
+}
+.hero-figure img{height:100%;width:auto;display:block}
+.hero-layout .citation-card{position:relative;z-index:3}
+
 .hero-copy h1{font-size:var(--fs-display);letter-spacing:-.045em}
 .hero-copy .lede{
   margin:var(--s-3) 0 var(--s-4);color:#dbe4ef;max-width:46ch;
@@ -249,9 +283,9 @@ p:last-child{margin-bottom:0}
 
 /* Citation capture card — the highest-intent conversion path on the page. */
 .citation-card{
-  background:#fff;color:var(--ink);padding:clamp(1.75rem,3vw,2.5rem);
+  background:#fff;color:var(--ink);padding:clamp(1.5rem,2.4vw,2.1rem);
   box-shadow:var(--shadow-lg);border-top:3px solid var(--gold);
-  max-width:420px;justify-self:end;width:100%;
+  max-width:380px;justify-self:end;width:100%;
 }
 .citation-card h2{font-size:clamp(1.6rem,1.2rem + 1.2vw,2.05rem);margin-bottom:var(--s-3)}
 .citation-card ul{list-style:none;padding:0;margin:0 0 var(--s-4)}
@@ -535,8 +569,16 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .callout a:hover{text-decoration:underline}
 
 /* --- 12. Responsive ------------------------------------------------------ */
+@media (max-width:1250px) and (min-width:1081px){
+  .hero-layout{grid-template-columns:1.1fr minmax(300px,360px)}
+  .hero-figure{display:none}
+}
+
 @media (max-width:1080px){
   .hero-layout{grid-template-columns:1fr;gap:var(--s-5)}
+  /* Hidden on phones on purpose: the hero is tuned so both CTAs sit inside
+     the first screen, and a figure here would push them back below the fold. */
+  .hero-figure{display:none}
   .citation-card{max-width:none;justify-self:stretch}
   .footer-grid{grid-template-columns:1fr 1fr;gap:var(--s-4)}
 }

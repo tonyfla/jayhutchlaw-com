@@ -405,5 +405,3 @@ Variations split local search ranking signals.
 - [ ] **Replace the attorney photo.** The current one is carried over from the
       Wix site and is intended to be swapped. See README for the two files and
       their dimensions.
-- [ ] **Hero to WebP** — the largest remaining performance item, and the only
-      thing on any of these lists that is purely cosmetic

@@ -26,8 +26,8 @@
 <!-- Performance: fonts are self-hosted, so preload the two that render above the fold -->
 <link rel="preload" href="/assets/fonts/dm-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/libre-baskerville-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/hero-atlanta.jpg" as="image" fetchpriority="high" media="(min-width:901px)">
-<link rel="preload" href="/assets/hero-atlanta-mobile.jpg" as="image" fetchpriority="high" media="(max-width:900px)">
+<link rel="preload" href="/assets/hero-atlanta.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width:901px)">
+<link rel="preload" href="/assets/hero-atlanta-mobile.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width:900px)">
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="icon" href="/assets/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/assets/favicon.png">
@@ -161,6 +161,15 @@
 
   <!-- ============ Hero ============ -->
   <section class="home-hero">
+    <!-- The <source> media query is what stops phones downloading 89 KB of a
+         figure they never see: display:none does not prevent the fetch. -->
+    <picture class="hero-figure">
+      <source media="(min-width:1251px)" srcset="/assets/portrait-hero.webp">
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+           alt="James Hutchins, managing attorney at Jay Hutch Law"
+           width="760" height="1116">
+    </picture>
+
     <div class="shell hero-layout">
       <div class="hero-copy">
         <p class="eyebrow eyebrow-light">Atlanta, Georgia</p>
