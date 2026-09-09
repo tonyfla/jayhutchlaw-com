@@ -10,7 +10,8 @@ It is excluded from the deploy by `.cfignore` and is not referenced by any page.
 | `brand/` | Logo files, colour and type specification, usage rules |
 | `brand/source/` | Editable originals (PSD, AI, full-resolution photography) |
 | `copy/` | Approved text — the single source of truth for the site and ads |
-| `campaigns/` | Ad copy, keyword lists, budget and performance notes |
+| `ads/` | **Social media ads — creative files, copy, and tagged links.** See `ads/README.md` |
+| `campaigns/` | Keyword lists, budget and performance notes |
 | `email/` | Clio Grow nurture sequences and intake templates |
 | `assets/` | Finished collateral: PDFs, one-pagers, social graphics |
 
@@ -30,6 +31,20 @@ should carry a status line at the top:
     Status: APPROVED — reviewed by J. Hutchins, YYYY-MM-DD
 
 Anything marked DRAFT must not go on the site or into an ad.
+
+## Ads
+
+`ads/` holds the actual ad files. Two commands run it:
+
+```bash
+python3 tools/ads.py new meta dui-atlanta v1 --page /practice-areas/dui-defense/
+python3 tools/ads.py check
+```
+
+`new` scaffolds the folder with a correctly tagged destination URL. `check`
+audits everything — oversized images, video committed to git, missing UTM tags,
+ads marked live without approval, and utm_source values that are not wired into
+Clio Grow. It exits non-zero on problems, so it can go in a pre-commit hook.
 
 ## Naming
 
