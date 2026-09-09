@@ -57,6 +57,38 @@ const json = (data, status = 200) =>
 
 const clean = (v, max = 2000) => String(v ?? '').trim().slice(0, max);
 
+/* Email and phone rules, mirroring js/forms.js. The client copy is for
+   feedback; this one is the rule, since anything can POST to this endpoint. */
+const EMAIL_RE = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$/;
+
+function validEmail(value) {
+  if (!value || value.length > 254) return false;
+  if (!EMAIL_RE.test(value)) return false;
+  const at = value.lastIndexOf('@');
+  if (value.slice(0, at).length > 64) return false;
+  const tld = value.slice(at + 1).toLowerCase().split('.').pop();
+  return /^[a-z]{2,24}$/.test(tld);
+}
+
+/* Returns the number in E.164 for Clio, or null if it is not a usable
+   North American number. */
+function normalisePhone(value) {
+  let digits = String(value || '').replace(/\D/g, '');
+  if (digits.length === 11 && digits.startsWith('1')) digits = digits.slice(1);
+  if (digits.length !== 10) return null;
+
+  const npa = digits.slice(0, 3);
+  const nxx = digits.slice(3, 6);
+
+  if (npa[0] < '2' || nxx[0] < '2') return null;
+  if (npa[1] === '1' && npa[2] === '1') return null;   // N11 service codes
+  if (nxx[1] === '1' && nxx[2] === '1') return null;
+  if (/^(\d)\1{9}$/.test(digits)) return null;
+  if (nxx === '555' && /^01\d\d$/.test(digits.slice(6))) return null;  // reserved for fiction
+
+  return `+1${digits}`;
+}
+
 const bytesStartWith = (bytes, signature) =>
   signature.every((byte, index) => bytes[index] === byte);
 
@@ -147,8 +179,13 @@ export async function onRequestPost({ request, env }) {
   if (!email && !phone) {
     return json({ ok: false, message: 'An email address or phone number is required.' }, 422);
   }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+  if (email && !validEmail(email)) {
     return json({ ok: false, message: 'That email address is not valid.' }, 422);
+  }
+
+  const phoneE164 = phone ? normalisePhone(phone) : null;
+  if (phone && !phoneE164) {
+    return json({ ok: false, message: 'That phone number is not a valid US number.' }, 422);
   }
 
   /* --- Attribution ------------------------------------------------------ */
@@ -244,7 +281,7 @@ export async function onRequestPost({ request, env }) {
     from_source: fromSource,
   };
   if (email) lead.email = email;
-  if (phone) lead.phone_number = phone;
+  if (phoneE164) lead.phone_number = phoneE164;   // E.164, as Clio's examples use
 
   const sourceId = MARKETING_SOURCE_IDS[(attribution.utm_source || '').toLowerCase()];
   if (sourceId) lead.marketing_source = { id: sourceId };

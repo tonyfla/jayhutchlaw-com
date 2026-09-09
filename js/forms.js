@@ -42,13 +42,104 @@
 
   var attribution = captureAttribution();
 
-  /* --- Validation ------------------------------------------------ */
+  /* --- Email and phone validation ---------------------------------
+     Mirrored server-side in functions/api/lead.js. A lead with a mistyped
+     email or an unreachable number is worse than no lead: the firm believes
+     it has a client to call and cannot reach them.
+     ----------------------------------------------------------------- */
+
+  // Domains that people actually mistype, and what they meant.
+  var DOMAIN_TYPOS = {
+    'gmail.co': 'gmail.com', 'gmial.com': 'gmail.com', 'gmai.com': 'gmail.com',
+    'gnail.com': 'gmail.com', 'gmaill.com': 'gmail.com', 'gmail.cm': 'gmail.com',
+    'yahoo.co': 'yahoo.com', 'yaho.com': 'yahoo.com', 'yahooo.com': 'yahoo.com',
+    'hotmial.com': 'hotmail.com', 'hotmai.com': 'hotmail.com', 'hotmal.com': 'hotmail.com',
+    'outlok.com': 'outlook.com', 'outloo.com': 'outlook.com',
+    'icloud.co': 'icloud.com', 'iclould.com': 'icloud.com',
+    'aol.co': 'aol.com', 'comcast.ent': 'comcast.net', 'bellsouth.ent': 'bellsouth.net'
+  };
+  var TLD_TYPOS = { con: 'com', cmo: 'com', vom: 'com', comm: 'com', ocm: 'com', ner: 'net', nte: 'net', ogr: 'org' };
+
+  var EMAIL_RE = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$/;
+
+  function checkEmail(raw) {
+    var value = raw.trim();
+    if (value.length > 254) return { ok: false, message: 'That email address is too long.' };
+    if (!EMAIL_RE.test(value)) return { ok: false, message: 'Enter a valid email address, like name@example.com.' };
+
+    var at = value.lastIndexOf('@');
+    if (value.slice(0, at).length > 64) return { ok: false, message: 'Enter a valid email address.' };
+
+    var domain = value.slice(at + 1).toLowerCase();
+    var tld = domain.split('.').pop();
+    if (!/^[a-z]{2,24}$/.test(tld)) return { ok: false, message: 'That email address does not have a valid domain.' };
+
+    // Likely typo — offered as a correction, never enforced. Real addresses
+    // at odd domains must still be able to submit.
+    var suggestion = null;
+    if (DOMAIN_TYPOS[domain]) suggestion = DOMAIN_TYPOS[domain];
+    else if (TLD_TYPOS[tld]) suggestion = domain.slice(0, -tld.length) + TLD_TYPOS[tld];
+    if (suggestion) return { ok: true, suggestion: value.slice(0, at + 1) + suggestion };
+
+    return { ok: true };
+  }
+
+  function checkPhone(raw) {
+    var digits = raw.replace(/\D/g, '');
+    if (digits.length === 11 && digits.charAt(0) === '1') digits = digits.slice(1);
+
+    if (digits.length < 10) return { ok: false, message: 'Enter a 10-digit phone number, including the area code.' };
+    if (digits.length > 10) return { ok: false, message: 'That is more digits than a US phone number has.' };
+
+    var npa = digits.slice(0, 3);
+    var nxx = digits.slice(3, 6);
+
+    if (npa.charAt(0) < '2') return { ok: false, message: 'An area code cannot start with 0 or 1.' };
+    if (nxx.charAt(0) < '2') return { ok: false, message: 'That does not look like a valid phone number.' };
+    // N11 codes (411, 911 and the rest) are reserved for services.
+    if (npa.charAt(1) === '1' && npa.charAt(2) === '1') return { ok: false, message: 'That is not a valid area code.' };
+    if (nxx.charAt(1) === '1' && nxx.charAt(2) === '1') return { ok: false, message: 'That does not look like a valid phone number.' };
+    if (/^(\d)\1{9}$/.test(digits)) return { ok: false, message: 'Enter a real phone number we can reach you on.' };
+    // 555-0100 to 555-0199 are reserved for fiction.
+    if (nxx === '555' && /^01\d\d$/.test(digits.slice(6))) return { ok: false, message: 'Enter a real phone number we can reach you on.' };
+
+    return { ok: true, pretty: '(' + npa + ') ' + nxx + '-' + digits.slice(6), e164: '+1' + digits };
+  }
+
+  /* --- Field validation -------------------------------------------- */
   function fieldError(input, message) {
     var wrap = input.closest('.field') || input.parentElement;
     var slot = wrap && wrap.querySelector('.field-error');
     input.setAttribute('aria-invalid', message ? 'true' : 'false');
-    if (slot) slot.textContent = message || '';
+    if (slot) {
+      slot.textContent = message || '';
+      slot.classList.remove('is-hint');
+    }
     return !message;
+  }
+
+  // A "did you mean" offer: advisory, dismissible by ignoring it, and fixable
+  // in one click. Announced politely because the slot is already aria-live.
+  function fieldHint(input, suggestion) {
+    var wrap = input.closest('.field') || input.parentElement;
+    var slot = wrap && wrap.querySelector('.field-error');
+    input.setAttribute('aria-invalid', 'false');
+    if (!slot) return true;
+    slot.textContent = '';
+    slot.classList.add('is-hint');
+    slot.appendChild(document.createTextNode('Did you mean '));
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'hint-fix';
+    button.textContent = suggestion;
+    button.addEventListener('click', function () {
+      input.value = suggestion;
+      validateField(input);
+      input.focus();
+    });
+    slot.appendChild(button);
+    slot.appendChild(document.createTextNode('?'));
+    return true;
   }
 
   function validateField(input) {
@@ -63,12 +154,21 @@
     if (input.required && !value) return fieldError(input, label + ' is required.');
     if (!value) return fieldError(input, '');
 
-    if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
-      return fieldError(input, 'Enter a valid email address.');
+    if (input.type === 'email') {
+      var email = checkEmail(value);
+      if (!email.ok) return fieldError(input, email.message);
+      if (email.suggestion) return fieldHint(input, email.suggestion);
+      return fieldError(input, '');
     }
-    if (input.type === 'tel' && (value.replace(/\D/g, '').length < 10)) {
-      return fieldError(input, 'Enter a valid phone number.');
+
+    if (input.type === 'tel') {
+      var phone = checkPhone(value);
+      if (!phone.ok) return fieldError(input, phone.message);
+      // Normalise on the way out so the CRM receives one consistent shape.
+      input.value = phone.pretty;
+      return fieldError(input, '');
     }
+
     return fieldError(input, '');
   }
 

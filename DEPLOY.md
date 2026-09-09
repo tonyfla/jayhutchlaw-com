@@ -217,6 +217,12 @@ source attached, so you cannot tell which campaign produced them.
 `CLIO_GROW_TOKEN` must be set as **Encrypted**, not plain text. Plain-text
 variables are readable by anyone with dashboard access.
 
+> **Set `NOTIFY_EMAIL` before launch — it is not optional any more.** The
+> function no longer writes lead details to the logs (they were readable by
+> anyone with dashboard access). The email fallback is now the *only* thing
+> between a Clio outage and a permanently lost enquiry. Without it, a failed
+> submission tells the visitor to call and keeps no record.
+
 Also configure the `EMAIL` send binding in Cloudflare Email Service and verify
 the sender domain before testing. When Clio is unavailable or not yet
 configured, the function sends the intake inbox the lead details instead of
@@ -239,6 +245,13 @@ the real site is still safely on Wix.
 
 - [ ] Homepage, a practice page, a guide, and `/upload-citation/` all load
 - [ ] Submit the homepage form with real details → lands on `/thank-you/`
+- [ ] Rejected: `bad`, `a@b`, `name@example.c` · accepted: `name@gmail.com`
+- [ ] `name@gmial.com` offers "Did you mean name@gmail.com?" and one click fixes it
+- [ ] Rejected: `104-555-1234`, `911-555-1234`, `5555555555` · `4045551234`
+      reformats to `(404) 555-1234` and reaches Clio as `+14045551234`
+- [ ] **Temporarily unset `CLIO_GROW_TOKEN`, submit, and confirm the fallback
+      email arrives.** This is the path that only runs when something is
+      already wrong, so it is the one most likely to be broken unnoticed.
 - [ ] **The lead appears in the Clio Grow inbox**, untriaged
 - [ ] Submit `/upload-citation/` with a photo attached
 - [ ] The file appears in the R2 bucket, and its key is in the Clio note

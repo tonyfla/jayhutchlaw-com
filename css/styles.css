@@ -354,6 +354,14 @@ p:last-child{margin-bottom:0}
 }
 .field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:#b3261e}
 .field-error{font-size:.78rem;color:#b3261e;min-height:1em}
+/* "Did you mean gmail.com?" — advisory, not an error, so it must not read red. */
+.field-error.is-hint{color:var(--muted)}
+.hint-fix{
+  background:none;border:0;padding:0;cursor:pointer;
+  font:inherit;font-weight:700;color:var(--gold-deep);
+  text-decoration:underline;text-underline-offset:2px;
+}
+.hint-fix:hover{color:#7a5920}
 
 .consent{display:flex;gap:.7rem;align-items:flex-start;font-size:.82rem;color:var(--muted)}
 .consent input{width:18px;height:18px;margin-top:.15rem;flex-shrink:0;accent-color:var(--gold-deep)}
