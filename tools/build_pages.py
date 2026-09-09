@@ -81,8 +81,7 @@ def header(active=""):
       <a href="/practice-areas/"{cls('practice')}>Practice Areas</a>
       <a href="/attorney/"{cls('attorney')}>Attorney</a>
       <a href="/resources/"{cls('resources')}>Resources</a>
-      <a href="/#about">About</a>
-      <a href="/#consultation">Contact</a>
+      <a href="/contact/"{cls('contact')}>Contact</a>
     </nav>
     <div class="nav-actions">
       <a class="phone" href="tel:{TEL}">☎ <span>855-HUTCHLAW</span></a>
@@ -197,9 +196,8 @@ def footer():
         <h3>Firm</h3>
         <a href="/attorney/">Attorney</a>
         <a href="/resources/">Resources</a>
-        <a href="/#about">About</a>
         <a href="/upload-citation/">Upload a Citation</a>
-        <a href="/#consultation">Contact</a>
+        <a href="/contact/">Contact</a>
       </div>
       <div>
         <h3>Contact</h3>

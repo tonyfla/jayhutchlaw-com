@@ -15,7 +15,7 @@ FIRM = {
 
 HUB = {
     "title": "Practice Areas | Atlanta Attorney | Jay Hutch Law",
-    "description": "Jay Hutch Law represents clients across Georgia in personal injury, DUI defense, premises liability, immigration, estate planning, and traffic citations.",
+    "description": "Jay Hutch Law represents clients across Georgia in personal injury, DUI defense, premises liability, immigration, and traffic citations.",
     "h1": "Clear counsel for life's legal challenges.",
     "lede": "Practical solutions and personal attention, so you understand your options and can move forward with confidence. Select an area below to read more about how the firm approaches it.",
 }
@@ -154,7 +154,7 @@ PAGES = [
             ("Does this only apply to stores and businesses?",
              "No. Premises liability can apply to apartment complexes, parking areas, private residences, and public spaces. Who is responsible depends on who owned or controlled the area where the injury occurred."),
         ],
-        "related": ["personal-injury", "dui-defense", "estate-planning"],
+        "related": ["personal-injury", "dui-defense", "traffic-citations"],
     },
     {
         "slug": "immigration",
@@ -198,57 +198,11 @@ PAGES = [
             ("Do I need to be in Atlanta to work with the firm?",
              "Immigration law is federal, so the firm can assist regardless of where in the country you live. Contact the office to confirm."),
         ],
-        "related": ["estate-planning", "personal-injury", "traffic-citations"],
-    },
-    {
-        "slug": "estate-planning",
-        "num": "05",
-        "nav": "Estate Planning",
-        "title": "Atlanta Estate Planning Attorney | Wills & Powers of Attorney | Jay Hutch Law",
-        "description": "Wills, powers of attorney, and advance directives tailored to Georgia law. Jay Hutch Law helps families protect property and make their wishes clear. Free consultation.",
-        "h1": "Estate Planning",
-        "lede": "Estate planning is less about wealth than about clarity — making sure the people you trust can act, and that your wishes are known before anyone has to guess.",
-        "source": "practice_estate",
-        "sections": [
-            ("What a plan usually includes", [
-                "<strong>A will.</strong> Directs how your property is distributed and names an executor. It is also where parents of minor children name a guardian — often the single most important reason to have one.",
-                "<strong>A financial power of attorney.</strong> Authorises someone to handle financial matters if you cannot. Without it, your family may need a court proceeding to do things as ordinary as paying your bills.",
-                "<strong>An advance directive for health care.</strong> Georgia combines the living will and health care agent into one document, letting you name who decides for you and record your wishes about treatment.",
-                "Depending on your circumstances, a plan may also involve trusts, beneficiary designations, or business succession arrangements.",
-            ]),
-            ("What happens without one", [
-                "If you die without a will in Georgia, state intestacy law decides who inherits. The result is a fixed formula that may not reflect what you would have chosen — a surviving spouse shares with children rather than inheriting everything, and unmarried partners and stepchildren receive nothing.",
-                "Without a power of attorney or advance directive, decisions that could have been made by someone you chose may instead require a court to appoint a guardian or conservator — a process that costs money, takes time, and happens at the worst possible moment.",
-            ]),
-            ("Practical points specific to Georgia", [
-                "Georgia requires a will to be signed by the testator and witnessed by two competent witnesses. A self-proving affidavit, signed before a notary at the same time, can significantly simplify probate later.",
-                "Georgia has no state estate tax, so for most families the planning question is not tax but clarity, access, and avoiding avoidable court involvement.",
-                "A plan is not permanent. Marriage, divorce, a birth, a death, a move to another state, or a significant change in assets are all reasons to revisit documents you already have.",
-            ]),
-        ],
-        "checklist": ("Worth thinking about beforehand", [
-            "Who should manage your affairs if you cannot",
-            "Who should raise your children, if that applies",
-            "Who should receive what, and whether anyone needs protecting",
-            "Where your accounts, policies, and deeds actually are",
-            "Whether existing beneficiary designations still match your wishes",
-            "Your wishes about medical treatment and who should speak for you",
-        ]),
-        "faqs": [
-            ("Do I need an estate plan if I do not have significant assets?",
-             "Most people benefit from at least a will, a financial power of attorney, and an advance directive. The powers of attorney and directive matter during your lifetime, and they matter regardless of how much you own. Naming a guardian for minor children has nothing to do with asset value at all."),
-            ("What makes a will valid in Georgia?",
-             "Georgia requires the will to be in writing, signed by the testator, and witnessed by two competent witnesses. Adding a self-proving affidavit at signing can make probate considerably simpler for the people you leave behind."),
-            ("Is a will from another state still valid here?",
-             "A will validly executed in another state is generally recognised in Georgia, but it is worth reviewing after a move. Terminology, procedure, and what makes probate straightforward differ from state to state."),
-            ("How often should I update my plan?",
-             "Review it after any significant life change — marriage, divorce, a birth, a death, a move, or a substantial change in assets — and otherwise every few years. Outdated beneficiary designations are one of the most common problems we see."),
-        ],
-        "related": ["immigration", "personal-injury", "premises-liability"],
+        "related": ["personal-injury", "premises-liability", "traffic-citations"],
     },
     {
         "slug": "traffic-citations",
-        "num": "06",
+        "num": "05",
         "nav": "Traffic Citations",
         "title": "Georgia Traffic Ticket Lawyer | Speeding & Super Speeder | Jay Hutch Law",
         "description": "Speeding, reckless driving, Super Speeder, and licence-related charges in Georgia. Jay Hutch Law works to protect your driving record and licence. Upload your citation for review.",

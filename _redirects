@@ -1,7 +1,7 @@
 # Cloudflare Pages redirects. First match wins.
 
 # The only URL the old Wix site had besides the homepage.
-/map                  /#consultation         301
+/map                  /contact/              301
 
 # Pre-redesign flat URLs -> the current structure. Permanent: these were the
 # live paths during the rebuild, and anything that linked to them should follow.
@@ -9,9 +9,9 @@
 /practice-areas.html  /practice-areas/       301
 /attorney.html        /attorney/             301
 /upload-citation.html /upload-citation/      301
-/contact.html         /#consultation         301
-/about.html           /#about                301
+/contact.html         /contact/              301
+/about.html           /attorney/             301
 
-# /about/ has no page of its own — it is a section of the single page.
-/about/               /#about                301
-/contact/             /#consultation         301
+# The firm's story now lives on the attorney page rather than a separate
+# About section, so both old paths point there.
+/about/               /attorney/             301

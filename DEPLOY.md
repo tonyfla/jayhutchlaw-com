@@ -37,7 +37,7 @@ Working notes for the review are in `marketing/copy/legal-review-notes.md`.
 
 - [ ] **Privacy policy** — `/privacy/`
 - [ ] **Disclaimer** — `/disclaimer/`
-- [ ] **Six practice-area pages** — source in `tools/content.py`. Georgia code
+- [ ] **Five practice-area pages** — source in `tools/content.py`. Georgia code
       references (O.C.G.A. § 9-3-33, § 51-12-33, § 51-3-1, § 40-6-189) are cited
       inline so they can be checked quickly.
 - [ ] **Three guides** — source in `tools/resources.py`
@@ -317,7 +317,7 @@ with a 301 does it.
 
 - [ ] Google Search Console: add the property, verify by DNS, submit
       `https://www.jayhutchlaw.com/sitemap.xml`
-- [ ] Request indexing for the homepage and the six practice pages
+- [ ] Request indexing for the homepage and the five practice pages
 - [ ] Update the Google Business Profile URL, and check the name, address and
       phone match `marketing/copy/firm-boilerplate.md` character for character
 - [ ] Update the link on every social profile
