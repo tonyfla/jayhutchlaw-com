@@ -167,6 +167,13 @@ def cmd_check(args):
             elif size > MAX_ANY_MB:
                 problems.append(f"{rel}/creative/{f}: {size:.1f} MB is too large to commit")
 
+    # An empty table means every ad's source is unmapped, which is worth saying
+    # once rather than silently passing.
+    if ad_files and not wired:
+        notes.append("MARKETING_SOURCE_IDS in functions/api/lead.js is empty — every lead "
+                     "will arrive in Clio Grow without a marketing source. Fill it in from "
+                     "GET /grow/sources once the Clio account exists.")
+
     print(f"Checked {len(ad_files)} ad{'s' if len(ad_files) != 1 else ''}.\n")
     if problems:
         print("Problems:")
