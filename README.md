@@ -8,9 +8,13 @@ runs through a Pages Function that creates an Inbox Lead in **Clio Grow**.
 
 ```
 index.html            single-page overview (hero, practice areas, firm, FAQ, form)
+practice-areas/       hub + six deep pages, generated from tools/
+attorney/             James Hutchins bio
+upload-citation/      citation intake with file upload
 privacy/  disclaimer/ legal pages — DRAFT, need attorney review
 thank-you/            conversion page (noindex) — form success target
 404.html
+tools/                page generators (see below) — not deployed
 css/styles.css        the whole design system, one file
 js/site.js            nav, scroll reveal, current year
 js/forms.js           attribution, validation, spam screening, submission
@@ -104,14 +108,34 @@ CAPTCHAs measurably reduce law-firm form completion.
   site faked it, which loses leads silently.
 - **`--section-y`** is the single knob for vertical page rhythm.
 
+## Regenerating pages
+
+The sub-pages share their header, footer, breadcrumbs, CTA bands, and structured
+data. Rather than editing that chrome in nine files, it lives in one template:
+
+```bash
+python3 tools/build_pages.py        # practice-areas hub + 6 deep pages
+python3 tools/build_firm_pages.py   # attorney + upload-citation
+```
+
+Practice-area copy lives in `tools/content.py`. **Edit the content there and
+regenerate — hand edits to the generated `index.html` files will be overwritten.**
+The generated HTML is committed and deploys as-is; Cloudflare runs no build step.
+
+`index.html`, `privacy/`, `disclaimer/`, `thank-you/`, and `404.html` are
+hand-written and are not touched by the generators.
+
 ## Still to do
 
-- Practice-area deep pages (6), attorney, and about pages. `_redirects`
-  currently 302s those URLs to the old pages so nothing dead-ends; remove that
-  block once the real pages exist, and add them to `sitemap.xml`.
+- **Legal review of all practice-area copy.** Every page in `tools/content.py`
+  is marked DRAFT. Georgia code references (O.C.G.A. § 9-3-33, § 51-12-33,
+  § 51-3-1, § 40-6-189) are cited so they can be checked quickly.
 - `/resources/` gated guides for lead generation.
 - Attorney review of `privacy/` and `disclaimer/` — **launch blockers.**
-- Real photography: hero and an attorney portrait.
+- Real photography: hero and an attorney portrait (`attorney/` still shows a
+  placeholder block).
+- Convert the hero to WebP — no encoder was available on the build machine, so
+  it currently ships as a 384 KB JPEG.
 - Confirm bar admissions and any credentials worth listing.
 - Google Business Profile using the exact NAP block in
   `marketing/copy/firm-boilerplate.md`.

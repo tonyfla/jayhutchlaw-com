@@ -388,6 +388,68 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .footer-bottom p{max-width:74ch;margin:0}
 .footer-legal{display:flex;gap:var(--s-3);flex-wrap:wrap}
 
+/* --- 10b. Sub-page (practice area) layout --------------------------------- */
+.breadcrumb{background:#fff;border-bottom:1px solid var(--line-cool);font-size:.8rem}
+.breadcrumb ol{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;margin:0;padding:.85rem 0;color:var(--muted)}
+.breadcrumb li+li::before{content:"/";margin-right:.5rem;color:var(--line)}
+.breadcrumb a{color:var(--gold-deep)}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb [aria-current]{color:var(--muted)}
+
+/* Light hero: sub-pages carry the reading, so they stay out of the way. */
+.page-hero-light{background:var(--paper);padding-block:clamp(2.5rem,5vw,4rem);border-bottom:1px solid var(--line)}
+.page-hero-light h1{font-size:var(--fs-h1);max-width:18ch}
+.page-hero-light .lede{margin-top:var(--s-3)}
+.hub-hero{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(2rem,5vw,4.5rem);align-items:end}
+.hub-hero .lede{border-left:1px solid var(--gold);padding-left:clamp(1.5rem,3vw,3rem);margin:0}
+
+.page-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:clamp(2rem,5vw,4.5rem);align-items:start}
+
+.page-body{max-width:72ch}
+.page-body h2{font-size:clamp(1.6rem,1.3rem + 1.1vw,2.15rem);margin:var(--s-6) 0 var(--s-3)}
+.page-body h2:first-child{margin-top:0}
+.page-body p{color:#31405a;font-size:1.035rem;line-height:1.72}
+.page-body strong{color:var(--ink);font-weight:700}
+.page-body .faq{margin-top:var(--s-3)}
+
+/* Time-sensitive warning — used where a deadline can cost someone their case. */
+.notice{background:#fdf4e3;border-left:3px solid var(--gold-deep);padding:var(--s-3) var(--s-4);margin-bottom:var(--s-5)}
+.notice p{margin:0;font-size:.97rem;color:#5c4715}
+.notice a{color:var(--gold-deep);font-weight:700;text-decoration:underline}
+
+.checklist{background:var(--paper);padding:var(--s-4) var(--s-5);margin:var(--s-6) 0;border-top:3px solid var(--gold)}
+.checklist h3{margin-bottom:var(--s-3)}
+.checklist ul{list-style:none;margin:0;padding:0}
+.checklist li{position:relative;padding:.45rem 0 .45rem 1.85rem;color:var(--muted);font-size:.97rem}
+.checklist li::before{content:"";position:absolute;left:0;top:1rem;width:9px;height:5px;border-left:2px solid var(--gold-deep);border-bottom:2px solid var(--gold-deep);transform:rotate(-45deg)}
+
+.disclaimer-note{margin-top:var(--s-6);padding-top:var(--s-4);border-top:1px solid var(--line);font-size:.83rem;color:var(--muted-light);line-height:1.6}
+
+/* Sticky conversion column. */
+.page-aside{position:sticky;top:calc(var(--header-h) + 1.25rem);display:grid;gap:var(--s-3)}
+.aside-card{background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);padding:var(--s-4)}
+.aside-card h2{font-size:1.35rem;margin-bottom:var(--s-3)}
+.aside-call{text-align:center;background:var(--paper);border-top-color:var(--gold-deep)}
+.aside-phone{display:block;font:1.7rem var(--serif);color:var(--gold-deep);margin-bottom:var(--s-2)}
+.aside-phone:hover{text-decoration:underline}
+.contact-form.stacked{grid-template-columns:1fr;gap:var(--s-2)}
+
+@media (max-width:1080px){
+  .page-layout{grid-template-columns:1fr}
+  .page-aside{position:static;max-width:560px}
+  .hub-hero{grid-template-columns:1fr;align-items:start}
+  .hub-hero .lede{border-left:0;padding-left:0}
+}
+
+/* --- 10c. Attorney page -------------------------------------------------- */
+.attorney-intro{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,5vw,4.5rem);align-items:start}
+.attorney-intro h1{font-size:clamp(2.2rem,1.6rem + 2.4vw,3.4rem)}
+.attorney-name{font:1.5rem var(--serif);color:var(--ink);margin:var(--s-4) 0 .15rem}
+.attorney-name span{color:var(--gold-deep);font-size:.75em}
+.attorney-role{text-transform:uppercase;letter-spacing:.16em;font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:var(--s-4)}
+.attorney-intro p{color:#31405a;line-height:1.72}
+@media (max-width:900px){.attorney-intro{grid-template-columns:1fr}.portrait-placeholder{min-height:340px}}
+
 /* --- 11. Legacy page support -------------------------------------------- */
 /* Classes used by the pre-redesign subpages so they keep rendering while
    they are rebuilt in step 2. Remove once those pages are replaced. */
