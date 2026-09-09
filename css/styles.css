@@ -180,13 +180,13 @@ p:last-child{margin-bottom:0}
 }
 .nav-wrap{height:100%;display:flex;align-items:center;gap:var(--s-4)}
 
-.brand{display:flex;align-items:center;gap:.9rem;flex-shrink:0}
-.brand-mark{
-  font:700 1.3rem var(--serif);color:var(--gold-deep);
-  border-right:1px solid var(--gold);padding:2px .9rem 2px 0;
-}
-.brand-name{font:1rem/1.15 var(--serif);letter-spacing:.13em}
-.brand-name b{font-size:.74em;letter-spacing:.22em;display:block;font-weight:400}
+/* The firm's mark. It is a light silver-blue, which sits well on the white
+   header and on the navy footer. Logotypes are exempt from WCAG 1.4.3, so the
+   low contrast against white is acceptable here — do not reuse these colours
+   for text. */
+.brand{display:flex;align-items:center;flex-shrink:0}
+.brand img{display:block;height:54px;width:auto}
+.site-footer .brand img{height:60px}
 
 .site-nav{display:flex;gap:var(--s-4);margin-left:auto;font-size:.94rem;font-weight:500}
 .site-nav a{position:relative;padding:.4rem 0;color:var(--ink)}
@@ -386,8 +386,6 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .footer-grid h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.16em;color:var(--gold-bright);font-family:var(--sans);font-weight:700;margin-bottom:var(--s-3)}
 .footer-grid a{display:block;margin-bottom:.55rem;color:#c9d4e0;transition:color .18s var(--ease)}
 .footer-grid a:hover{color:#fff}
-.site-footer .brand-name{color:#fff}
-.site-footer .brand-mark{color:var(--gold-bright);border-color:rgba(255,255,255,.3)}
 .footer-bottom{
   border-top:1px solid rgba(255,255,255,.13);padding-top:var(--s-4);
   display:flex;justify-content:space-between;gap:var(--s-4);flex-wrap:wrap;
@@ -456,7 +454,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .attorney-name span{color:var(--gold-deep);font-size:.75em}
 .attorney-role{text-transform:uppercase;letter-spacing:.16em;font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:var(--s-4)}
 .attorney-intro p{color:#31405a;line-height:1.72}
-@media (max-width:900px){.attorney-intro{grid-template-columns:1fr}.portrait-placeholder{min-height:340px}}
+@media (max-width:900px){.attorney-intro{grid-template-columns:1fr}.portrait{max-width:420px;margin-inline:auto}}
 
 /* --- 10d. Resource guides ------------------------------------------------ */
 .guide-card{min-height:auto}
@@ -487,10 +485,9 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 /* --- 11. Shared odds and ends ------------------------------------------- */
 /* What survived the retirement of the pre-redesign pages: still used by
    /attorney/ (portrait, detail-list) and the citation/consult callouts. */
-.portrait-placeholder{
-  min-height:520px;display:grid;place-items:center;text-align:center;
-  background:linear-gradient(145deg,#dfe3e5,#b9c0c7);color:#4a5768;
-  border:4px solid #fff;box-shadow:var(--shadow-md);font-size:.85rem;letter-spacing:.1em;
+.portrait{
+  width:100%;height:auto;display:block;
+  border:5px solid #fff;box-shadow:var(--shadow-md);
 }
 .detail-list{
   display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3);
@@ -512,6 +509,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 
 @media (max-width:900px){
   :root{--header-h:68px}
+  .brand img{height:44px}
   .menu-toggle{display:flex}
   .site-nav{
     display:none;position:absolute;top:var(--header-h);left:0;right:0;
@@ -545,7 +543,8 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 }
 
 @media (max-width:560px){
-  .brand-name{display:none}
+  /* <picture> swaps to the wreath mark alone below 560px */
+  .brand img{height:42px}
   .contact-form{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}
   .button-row{display:grid}

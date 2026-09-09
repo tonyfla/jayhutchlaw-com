@@ -153,8 +153,9 @@ by the generators. Legal copy lives in `tools/build_legal.py`.
   § 51-3-1, § 40-6-189) are cited so they can be checked quickly.
 - Decide whether to switch the resource gate on (see below).
 - Attorney review of `privacy/` and `disclaimer/` — **launch blockers.**
-- Real photography: hero and an attorney portrait (`attorney/` still shows a
-  placeholder block).
+- Logo, favicon, and the attorney portrait were taken from the existing Wix
+  site; masters are in `marketing/brand/source/`. Confirm they are the versions
+  the firm wants used.
 - Convert the hero to WebP — no encoder was available on the build machine, so
   it ships as JPEG (376 KB desktop / 128 KB mobile). WebP would roughly halve
   both; it is the largest remaining performance item.

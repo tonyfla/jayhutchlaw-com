@@ -29,7 +29,8 @@
 <link rel="preload" href="/assets/hero-atlanta.jpg" as="image" fetchpriority="high" media="(min-width:901px)">
 <link rel="preload" href="/assets/hero-atlanta-mobile.jpg" as="image" fetchpriority="high" media="(max-width:900px)">
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
 
 <script type="application/ld+json">
 {
@@ -119,8 +120,10 @@
 <header class="site-header">
   <div class="shell nav-wrap">
     <a class="brand" href="/" aria-label="Jay Hutch Law — home">
-      <span class="brand-mark" aria-hidden="true">JH</span>
-      <span class="brand-name">JAY HUTCH <b>LAW</b></span>
+      <picture>
+        <source media="(max-width:560px)" srcset="/assets/logo-mark.png">
+        <img src="/assets/logo.png" alt="" width="760" height="322">
+      </picture>
     </a>
 
     <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
@@ -128,6 +131,7 @@
     </button>
 
     <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="/">Home</a>
       <a href="#practice-areas">Practice Areas</a>
       <a href="/attorney/">Attorney</a>
       <a href="/resources/">Resources</a>
@@ -412,9 +416,8 @@
   <div class="shell">
     <div class="footer-grid">
       <div>
-        <a class="brand" href="/">
-          <span class="brand-mark" aria-hidden="true">JH</span>
-          <span class="brand-name">JAY HUTCH <b>LAW</b></span>
+        <a class="brand" href="/" aria-label="Jay Hutch Law — home">
+          <img src="/assets/logo.png" alt="" width="760" height="322">
         </a>
         <p style="margin-top:1.25rem;color:#93a3b6">Strategic legal representation for individuals and families throughout Georgia.</p>
       </div>

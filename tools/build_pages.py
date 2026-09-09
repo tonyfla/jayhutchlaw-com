@@ -47,7 +47,8 @@ def head(title, description, path, extra_ld=None, robots="index,follow,max-image
 <link rel="preload" href="/assets/fonts/dm-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/libre-baskerville-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
 {f'<script type="application/ld+json">{chr(10)}{ld}{chr(10)}</script>' if ld else ''}
 </head>
 
@@ -62,13 +63,16 @@ def header(active=""):
     return f"""<header class="site-header">
   <div class="shell nav-wrap">
     <a class="brand" href="/" aria-label="Jay Hutch Law — home">
-      <span class="brand-mark" aria-hidden="true">JH</span>
-      <span class="brand-name">JAY HUTCH <b>LAW</b></span>
+      <picture>
+        <source media="(max-width:560px)" srcset="/assets/logo-mark.png">
+        <img src="/assets/logo.png" alt="" width="760" height="322">
+      </picture>
     </a>
     <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
       <i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i>
     </button>
     <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="/"{cls('home')}>Home</a>
       <a href="/practice-areas/"{cls('practice')}>Practice Areas</a>
       <a href="/attorney/"{cls('attorney')}>Attorney</a>
       <a href="/resources/"{cls('resources')}>Resources</a>
@@ -163,9 +167,8 @@ def footer():
   <div class="shell">
     <div class="footer-grid">
       <div>
-        <a class="brand" href="/">
-          <span class="brand-mark" aria-hidden="true">JH</span>
-          <span class="brand-name">JAY HUTCH <b>LAW</b></span>
+        <a class="brand" href="/" aria-label="Jay Hutch Law — home">
+          <img src="/assets/logo.png" alt="" width="760" height="322">
         </a>
         <p style="margin-top:1.25rem;color:#93a3b6">Strategic legal representation for individuals and families throughout Georgia.</p>
       </div>

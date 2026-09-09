@@ -76,8 +76,9 @@ def build_attorney():
         </div>
       </div>
 
-      <!-- Replace with a real portrait before launch. -->
-      <div class="portrait-placeholder">JAMES HUTCHINS, ESQ.<br>PORTRAIT</div>
+      <img class="portrait" src="/assets/portrait-james-hutchins.jpg"
+           alt="James Hutchins, managing attorney at Jay Hutch Law"
+           width="900" height="1350" loading="lazy">
     </div>
   </section>
 
