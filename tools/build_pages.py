@@ -252,7 +252,7 @@ def cta_band():
     return f"""<section class="cta-band">
   <div class="shell">
     <p class="eyebrow eyebrow-light">Your matter deserves personal attention</p>
-    <h2>Let's talk about where you stand.</h2>
+    <h2>Tell us what happened.</h2>
     <div class="button-row">
       <a class="button button-gold button-lg" href="#consult">Request a Free Consultation</a>
       <a class="button button-ghost button-lg" href="tel:{TEL}">☎ Call {PHONE}</a>

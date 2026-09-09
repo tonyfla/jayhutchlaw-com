@@ -34,7 +34,7 @@
   --sans:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 
   /* Fluid type scale */
-  --fs-display:clamp(2.75rem,1.6rem + 4.6vw,5rem);
+  --fs-display:clamp(2rem,1.2rem + 3.4vw,3.75rem);
   --fs-h1:clamp(2.4rem,1.5rem + 3.6vw,4.1rem);
   --fs-h2:clamp(2rem,1.35rem + 2.6vw,3.3rem);
   --fs-h3:clamp(1.3rem,1.15rem + .6vw,1.6rem);
@@ -232,7 +232,10 @@ p:last-child{margin-bottom:0}
   padding-block:clamp(3rem,7vw,5rem);
 }
 .hero-copy h1{font-size:var(--fs-display);letter-spacing:-.045em}
-.hero-copy .lede{margin:var(--s-4) 0 var(--s-5);color:#dbe4ef;max-width:54ch}
+.hero-copy .lede{
+  margin:var(--s-3) 0 var(--s-4);color:#dbe4ef;max-width:46ch;
+  font-size:clamp(1rem,.95rem + .25vw,1.125rem);
+}
 
 /* Trust strip under the hero CTAs — credibility without inventing claims. */
 .hero-trust{
@@ -541,6 +544,16 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 @media (max-width:900px){
   :root{--header-h:68px}
   .brand img{height:44px}
+
+  /* Most visitors arrive on a phone, so the hero is tuned to put both CTAs
+     inside the first screen once browser chrome is accounted for. */
+  .hero-layout{padding-block:2.25rem 2.5rem;gap:var(--s-4)}
+  .hero-copy .lede{margin:var(--s-3) 0 var(--s-4)}
+  .hero-trust{
+    margin-top:var(--s-3);padding-top:var(--s-3);
+    gap:.4rem var(--s-3);font-size:.82rem;
+  }
+  .button-row{gap:var(--s-2)}
   .menu-toggle{display:flex}
   .site-nav{
     display:none;position:absolute;top:var(--header-h);left:0;right:0;
