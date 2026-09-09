@@ -156,9 +156,21 @@ by the generators. Legal copy lives in `tools/build_legal.py`.
   § 51-3-1, § 40-6-189) are cited so they can be checked quickly.
 - Decide whether to switch the resource gate on (see below).
 - Attorney review of `privacy/` and `disclaimer/` — **launch blockers.**
-- Logo, favicon, and the attorney portrait were taken from the existing Wix
-  site; masters are in `marketing/brand/source/`. Confirm they are the versions
-  the firm wants used.
+- Logo and favicon were taken from the existing Wix site; masters are in
+  `marketing/brand/source/`. Confirm they are the versions the firm wants used.
+- **Attorney photo is a placeholder pending a replacement.** Two files, both
+  derived from the same source and used in different places:
+
+  | File | Size | Where |
+  |---|---|---|
+  | `assets/hero-portrait.jpg` | 620x771 | Homepage hero — tight head and shoulders |
+  | `assets/portrait-james-hutchins.jpg` | 900x1350 | `/attorney/` — fuller portrait |
+
+  To swap: drop the new photo in and overwrite both at those dimensions, or
+  hand me the original and I will crop them. The hero one wants a tight crop —
+  a full torso reads as a small figure at that size. A cut-out on a transparent
+  background would let the hero drop the white frame and sit the subject
+  directly against the skyline.
 - Convert the hero to WebP — no encoder was available on the build machine, so
   it ships as JPEG (376 KB desktop / 128 KB mobile). WebP would roughly halve
   both; it is the largest remaining performance item.

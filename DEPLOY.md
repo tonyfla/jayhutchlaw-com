@@ -400,7 +400,10 @@ Variations split local search ranking signals.
 
 - [ ] **Confirm the Clio auth header** (step 4) — the likeliest single point of
       failure in the integration
-- [ ] **Confirm the logo and portrait** are the versions the firm wants used.
-      Both were taken from the existing Wix site.
+- [ ] **Confirm the logo** is the version the firm wants used. It was taken
+      from the existing Wix site.
+- [ ] **Replace the attorney photo.** The current one is carried over from the
+      Wix site and is intended to be swapped. See README for the two files and
+      their dimensions.
 - [ ] **Hero to WebP** — the largest remaining performance item, and the only
       thing on any of these lists that is purely cosmetic
