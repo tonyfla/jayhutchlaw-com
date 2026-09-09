@@ -1,0 +1,16 @@
+# Cloudflare Pages redirects. First match wins.
+
+# The only URL the old Wix site had besides the homepage.
+/map  /#consultation  301
+
+# --- Temporary, remove in step 2 -------------------------------------------
+# The homepage links to the final URL structure. Until those pages are built,
+# point them at the existing pages so nothing on the site dead-ends.
+# These are 302s deliberately: they must not be cached by browsers or Google.
+/practice-areas/      /practice-areas.html   302
+/attorney/            /attorney.html         302
+/about/               /about.html            302
+/contact/             /#consultation         302
+/upload-citation/     /upload-citation.html  302
+/practice-areas/*     /practice-areas.html   302
+# ---------------------------------------------------------------------------

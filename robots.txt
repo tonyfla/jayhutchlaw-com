@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Conversion and utility pages carry noindex in their markup as well.
+Disallow: /thank-you/
+Disallow: /api/
+
+Sitemap: https://www.jayhutchlaw.com/sitemap.xml

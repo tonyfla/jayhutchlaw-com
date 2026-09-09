@@ -1,0 +1,5 @@
+# Excluded from the Cloudflare Pages deploy.
+marketing/
+README.md
+wrangler.toml
+.dev.vars

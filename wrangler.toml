@@ -1,0 +1,16 @@
+# Local preview:  npx wrangler pages dev .
+# Secrets for local runs go in .dev.vars (gitignored), not in this file.
+name = "jayhutchlaw"
+compatibility_date = "2026-09-09"
+pages_build_output_dir = "."
+
+# Citation attachments. Create the bucket before the first deploy:
+#   npx wrangler r2 bucket create jayhutchlaw-uploads
+[[r2_buckets]]
+binding = "UPLOADS"
+bucket_name = "jayhutchlaw-uploads"
+
+[vars]
+CLIO_REGION = "us"
+# PUBLIC_UPLOAD_BASE is set per-environment in the Cloudflare dashboard.
+# CLIO_GROW_TOKEN is a secret — never put it here.
