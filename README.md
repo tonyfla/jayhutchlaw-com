@@ -161,16 +161,13 @@ by the generators. Legal copy lives in `tools/build_legal.py`.
 - **Attorney photo is a placeholder pending a replacement.** Two files, both
   derived from the same source and used in different places:
 
-  | File | Size | Where |
-  |---|---|---|
-  | `assets/hero-portrait.jpg` | 620x771 | Homepage hero — tight head and shoulders |
-  | `assets/portrait-james-hutchins.jpg` | 900x1350 | `/attorney/` — fuller portrait |
+  `assets/portrait-james-hutchins.jpg` (900x1350) is used on `/attorney/`.
+  Overwrite it at those dimensions, or hand over the original to be cropped.
 
-  To swap: drop the new photo in and overwrite both at those dimensions, or
-  hand me the original and I will crop them. The hero one wants a tight crop —
-  a full torso reads as a small figure at that size. A cut-out on a transparent
-  background would let the hero drop the white frame and sit the subject
-  directly against the skyline.
+  The homepage hero deliberately has no portrait: it was tried and the card
+  ended up covering the photo. If a portrait belongs there later, it needs a
+  cut-out on a transparent background so it can sit against the skyline rather
+  than in a frame competing with the citation card.
 - Convert the hero to WebP — no encoder was available on the build machine, so
   it ships as JPEG (376 KB desktop / 128 KB mobile). WebP would roughly halve
   both; it is the largest remaining performance item.
