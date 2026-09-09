@@ -53,6 +53,30 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.jayhutchlaw.com/resources/</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.jayhutchlaw.com/resources/after-a-car-accident-in-georgia/</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.jayhutchlaw.com/resources/first-48-hours-after-a-georgia-dui-arrest/</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.jayhutchlaw.com/resources/what-a-georgia-traffic-ticket-really-costs/</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.jayhutchlaw.com/attorney/</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>yearly</changefreq>

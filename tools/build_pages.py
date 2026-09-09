@@ -71,6 +71,7 @@ def header(active=""):
     <nav class="site-nav" id="site-nav" aria-label="Primary">
       <a href="/practice-areas/"{cls('practice')}>Practice Areas</a>
       <a href="/attorney/"{cls('attorney')}>Attorney</a>
+      <a href="/resources/"{cls('resources')}>Resources</a>
       <a href="/#about">About</a>
       <a href="/#consultation">Contact</a>
     </nav>
@@ -175,6 +176,7 @@ def footer():
       <div>
         <h3>Firm</h3>
         <a href="/attorney/">Attorney</a>
+        <a href="/resources/">Resources</a>
         <a href="/#about">About</a>
         <a href="/upload-citation/">Upload a Citation</a>
         <a href="/#consultation">Contact</a>

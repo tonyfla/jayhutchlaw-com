@@ -10,6 +10,7 @@ runs through a Pages Function that creates an Inbox Lead in **Clio Grow**.
 index.html            single-page overview (hero, practice areas, firm, FAQ, form)
 practice-areas/       hub + six deep pages, generated from tools/
 attorney/             James Hutchins bio
+resources/            guide hub + 3 open, indexed articles
 upload-citation/      citation intake with file upload
 privacy/  disclaimer/ legal pages — DRAFT, need attorney review
 thank-you/            conversion page (noindex) — form success target
@@ -116,9 +117,11 @@ data. Rather than editing that chrome in nine files, it lives in one template:
 ```bash
 python3 tools/build_pages.py        # practice-areas hub + 6 deep pages
 python3 tools/build_firm_pages.py   # attorney + upload-citation
+python3 tools/build_resources.py    # resources hub + guides
 ```
 
-Practice-area copy lives in `tools/content.py`. **Edit the content there and
+Practice-area copy lives in `tools/content.py`; guide copy in
+`tools/resources.py`. **Edit the content there and
 regenerate — hand edits to the generated `index.html` files will be overwritten.**
 The generated HTML is committed and deploys as-is; Cloudflare runs no build step.
 
@@ -130,7 +133,7 @@ hand-written and are not touched by the generators.
 - **Legal review of all practice-area copy.** Every page in `tools/content.py`
   is marked DRAFT. Georgia code references (O.C.G.A. § 9-3-33, § 51-12-33,
   § 51-3-1, § 40-6-189) are cited so they can be checked quickly.
-- `/resources/` gated guides for lead generation.
+- Decide whether to switch the resource gate on (see below).
 - Attorney review of `privacy/` and `disclaimer/` — **launch blockers.**
 - Real photography: hero and an attorney portrait (`attorney/` still shows a
   placeholder block).
@@ -139,3 +142,20 @@ hand-written and are not touched by the generators.
 - Confirm bar admissions and any credentials worth listing.
 - Google Business Profile using the exact NAP block in
   `marketing/copy/firm-boilerplate.md`.
+
+## The resource gate
+
+`/resources/` is currently **open** — guides are free to read, no form.
+
+To capture leads from them later, set `GATE_ENABLED = true` at the top of
+`js/resources.js`. That is the whole change. A form then appears in front of
+the *key points* card on each guide, and a successful submission creates a
+Clio Grow lead tagged with which guide the visitor wanted
+(`guide_car_accident`, `guide_dui_48h`, `guide_ticket_cost`).
+
+**The article text is never gated, and must not be.** Hiding it behind a form
+removes it from search results, which is the only reason it earns anything.
+Only the summary card is gateable, and the gate has been tested in both states.
+
+Enabling the gate means emailing people who fill it in — so `privacy/` and the
+consent checkbox need to be live and reviewed first.

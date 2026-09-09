@@ -450,6 +450,32 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .attorney-intro p{color:#31405a;line-height:1.72}
 @media (max-width:900px){.attorney-intro{grid-template-columns:1fr}.portrait-placeholder{min-height:340px}}
 
+/* --- 10d. Resource guides ------------------------------------------------ */
+.guide-card{min-height:auto}
+.guide-card p{max-width:44ch}
+
+.download-card{border:1px solid var(--line);border-top:3px solid var(--gold-deep);background:#fff;margin:var(--s-6) 0}
+.download-head{padding:var(--s-4) var(--s-4) 0}
+.download-head h2{margin:0;font-size:1.5rem}
+.download-body{padding:var(--s-3) var(--s-4) var(--s-4)}
+.takeaway{list-style:none;margin:0 0 var(--s-4);padding:0}
+.takeaway li{position:relative;padding:.45rem 0 .45rem 1.85rem;color:#31405a;font-size:.97rem}
+.takeaway li::before{content:"";position:absolute;left:0;top:1rem;width:9px;height:5px;border-left:2px solid var(--gold-deep);border-bottom:2px solid var(--gold-deep);transform:rotate(-45deg)}
+
+/* Only present when GATE_ENABLED is true in js/resources.js. */
+.gate{padding:var(--s-3) var(--s-4) var(--s-4);background:var(--paper);border-top:1px solid var(--line)}
+.gate-intro{font-size:.92rem;color:var(--muted);margin-bottom:var(--s-3)}
+.gate .contact-form{max-width:420px}
+
+@media print{
+  .breadcrumb,.page-aside,.download-card .button-row,.notice a{display:none}
+  .page-layout{display:block}
+  .page-body{max-width:none}
+  .download-card{border:1px solid #999;break-inside:avoid}
+  .faq details{break-inside:avoid}
+  .faq details p{display:block}
+}
+
 /* --- 11. Legacy page support -------------------------------------------- */
 /* Classes used by the pre-redesign subpages so they keep rendering while
    they are rebuilt in step 2. Remove once those pages are replaced. */

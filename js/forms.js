@@ -190,10 +190,20 @@
             return body;
           });
         })
-        .then(function () {
+        .then(function (body) {
           form.reset();
           var list = form.querySelector('.upload-list');
           if (list) list.textContent = '';
+
+          // Let an in-page handler (the resource gate) react and reveal
+          // content instead of navigating away. data-redirect="#" opts out
+          // of the redirect entirely.
+          form.dispatchEvent(new CustomEvent('jhl:submitted', { detail: body, bubbles: true }));
+          if (form.dataset.redirect === '#') {
+            submitting = false;
+            if (button) { button.disabled = false; button.textContent = originalText; }
+            return;
+          }
           window.location.assign(form.dataset.redirect || '/thank-you/');
         })
         .catch(function (err) {
