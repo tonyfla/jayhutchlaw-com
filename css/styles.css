@@ -386,6 +386,19 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .footer-grid h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.16em;color:var(--gold-bright);font-family:var(--sans);font-weight:700;margin-bottom:var(--s-3)}
 .footer-grid a{display:block;margin-bottom:.55rem;color:#c9d4e0;transition:color .18s var(--ease)}
 .footer-grid a:hover{color:#fff}
+/* Scoped under .footer-grid so the 44px mobile link rule below does not
+   turn these into full-width flex rows. */
+.footer-grid .footer-social{display:flex;gap:.6rem;margin-top:1.1rem}
+.footer-grid .footer-social a{
+  display:grid;place-items:center;width:44px;height:44px;margin:0;
+  border:1px solid rgba(255,255,255,.22);border-radius:2px;color:#c9d4e0;
+  transition:background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease);
+}
+.footer-grid .footer-social a:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.5)}
+.footer-social svg{
+  width:19px;height:19px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
 .footer-bottom{
   border-top:1px solid rgba(255,255,255,.13);padding-top:var(--s-4);
   display:flex;justify-content:space-between;gap:var(--s-4);flex-wrap:wrap;
