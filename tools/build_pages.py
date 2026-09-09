@@ -75,7 +75,6 @@ def header(active=""):
       <a href="/"{cls('home')}>Home</a>
       <a href="/practice-areas/"{cls('practice')}>Practice Areas</a>
       <a href="/attorney/"{cls('attorney')}>Attorney</a>
-      <a href="/resources/"{cls('resources')}>Resources</a>
       <a href="/#about">About</a>
       <a href="/#consultation">Contact</a>
     </nav>

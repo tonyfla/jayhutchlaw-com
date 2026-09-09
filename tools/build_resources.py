@@ -117,7 +117,7 @@ def build_guide(guide):
 
     return (
         head(guide["title"], guide["description"], path, ld)
-        + header("resources")
+        + header()
         + breadcrumb([("Home", "/"), ("Resources", "/resources/"), (guide["nav"], None)])
         + f"""<main id="main">
 
@@ -223,7 +223,7 @@ def build_hub():
 
     return (
         head(HUB["title"], HUB["description"], path, ld)
-        + header("resources")
+        + header()
         + breadcrumb([("Home", "/"), ("Resources", None)])
         + f"""<main id="main">
 
