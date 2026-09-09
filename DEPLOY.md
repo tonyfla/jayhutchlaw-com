@@ -5,8 +5,9 @@ Taking jayhutchlaw.com from the current Wix site to Cloudflare Pages.
 The old site stays live and untouched until step 7. Everything before that is
 reversible, and nothing a visitor sees changes until you move the nameservers.
 
-**Budget about 90 minutes**, split across two sittings — steps 1–6 can be done
-whenever, step 7 is the one to do deliberately.
+**Gate 0 is approvals and runs on the attorney's clock, not yours.** Once it is
+cleared, budget about 90 minutes for the rest: steps 1–6 can be done whenever,
+step 7 is the one to do deliberately.
 
 ---
 
@@ -20,7 +21,67 @@ whenever, step 7 is the one to do deliberately.
       Wix only runs the nameservers (`NS10/NS11.WIXDNS.NET`). If nobody knows
       this login, sort it out before you begin: recovering it is the single
       most likely thing to stall the launch.
-- [ ] Attorney sign-off on the draft copy (see "Blockers" at the end)
+- [ ] Attorney sign-off — see **Gate 0** immediately below. Nothing publishes
+      under the firm's name unreviewed.
+
+---
+
+## Gate 0. Approvals — clear these before step 1
+
+Every one of these is a hard stop. The technical steps are reversible; a
+published page carrying an unreviewed legal claim is not.
+
+Working notes for the review are in `marketing/copy/legal-review-notes.md`.
+
+### Copy approval
+
+- [ ] **Privacy policy** — `/privacy/`
+- [ ] **Disclaimer** — `/disclaimer/`
+- [ ] **Six practice-area pages** — source in `tools/content.py`. Georgia code
+      references (O.C.G.A. § 9-3-33, § 51-12-33, § 51-3-1, § 40-6-189) are cited
+      inline so they can be checked quickly.
+- [ ] **Three guides** — source in `tools/resources.py`
+- [ ] **Attorney bio** — `/attorney/`, source in `tools/build_firm_pages.py`
+
+### Professional-responsibility checks
+
+- [ ] **Georgia RPC 7.1–7.5** reviewed against the site's advertising language —
+      including whether the advertising disclosure needs particular wording or
+      placement, and whether naming the responsible attorney is required
+- [ ] **Rule 7.4** — confirm the practice-area descriptions do not imply
+      certification or specialisation. The disclaimer carries a line stating
+      they do not; confirm it is sufficient.
+- [ ] **Bar admissions confirmed.** Both legal pages state the firm's attorneys
+      are licensed in Georgia and nowhere else. Correct if that is wrong.
+- [ ] **No results, testimonials, or reviews anywhere on the site.** There are
+      none today. If any are added later, see *Standing rules* below.
+
+### Privacy decisions
+
+- [ ] **Record retention period** decided — the policy currently says records
+      are kept "as long as needed" rather than naming a period
+- [ ] **Processor naming** confirmed — the policy names Clio Grow and Cloudflare
+      explicitly. Keep, or switch to generic descriptions.
+- [ ] **Out-of-state / international enquiries** considered. No CCPA or GDPR
+      section is included. The immigration practice makes non-US enquiries more
+      likely here than for most Georgia firms.
+
+### Consent and messaging
+
+- [ ] **Decide whether Clio Grow will send automated SMS or email sequences.**
+      The forms' checkbox reads *"I agree to be contacted about my inquiry"*,
+      which covers a reply. It likely does **not** meet the TCPA's express
+      written consent standard for automated marketing texts — and the mobile
+      bar has a Text button. If automated messaging is switched on, the checkbox
+      wording must change first.
+- [ ] **Confirm what Clio Grow actually sends automatically** once connected,
+      rather than assuming it sends nothing.
+
+### Final
+
+- [ ] **Effective date set** on both legal pages — currently 9 September 2026.
+      Change `UPDATED` in `tools/build_legal.py` and regenerate.
+- [ ] Everything approved above has been regenerated and pushed
 
 ---
 
@@ -177,6 +238,8 @@ the real site is still safely on Wix.
 - [ ] Visit with `?utm_source=facebook&utm_medium=cpc&utm_campaign=test`, submit,
       and confirm the campaign shows in the lead's message body
 - [ ] Check on a phone: the sticky Call / Text / Consult bar works
+- [ ] `/privacy/` and `/disclaimer/` are the **approved** versions, and the
+      effective date is the date you are publishing
 
 If a form shows an error instead of redirecting, that is the design working —
 it never fakes success. **Deployments → latest → Functions** shows the real
@@ -275,13 +338,48 @@ logs, so anything that came in during an outage can be recovered by hand.
 
 ---
 
-## Blockers before any of this goes live
+## Standing rules after launch
 
-1. **Attorney review of all draft copy** — six practice pages, three guides, and
-   the privacy policy and disclaimer. Georgia code references are cited inline
-   so it can be checked quickly. Nothing publishes under the firm's name
-   unreviewed.
-2. **Confirm the Clio auth header** (step 4).
-3. **Photography** — the attorney page shows a placeholder block.
-4. Convert the hero to WebP — the largest remaining performance item, and the
-   only one on this list that is purely cosmetic.
+These are not one-time checks. Each one describes a change that makes a
+currently-true statement on the site false.
+
+### Before adding any tracking tag
+
+The privacy policy states plainly: *"This site sets no advertising or analytics
+cookies of its own."* That is true today.
+
+**Adding a Meta Pixel, Google Ads tag, or GA4 makes it false.** The policy has
+to be rewritten first, and a consent banner is likely needed. This is the most
+likely way the firm's own privacy policy becomes a liability, and the ad work
+points directly at it.
+
+- [ ] Policy updated **before** any tag goes live
+- [ ] Consent banner assessed
+
+### Before switching on automated messaging
+
+See Gate 0. The consent checkbox governs what you may send. Changing what you
+send means changing the checkbox first, not afterwards.
+
+### Before publishing any result, testimonial, or review
+
+Neither legal page addresses them, because the site has none. Georgia imposes
+specific requirements on how they must be presented. Both pages need updating
+before the first one appears.
+
+### When practice areas or services change
+
+`marketing/copy/firm-boilerplate.md` is the source of truth for the firm's
+description, and the name, address and phone must match the site, the Google
+Business Profile, and every directory listing character for character.
+Variations split local search ranking signals.
+
+---
+
+## Remaining non-legal work
+
+- [ ] **Confirm the Clio auth header** (step 4) — the likeliest single point of
+      failure in the integration
+- [ ] **Photography** — the attorney page shows a placeholder block
+- [ ] **Hero to WebP** — the largest remaining performance item, and the only
+      thing on any of these lists that is purely cosmetic
