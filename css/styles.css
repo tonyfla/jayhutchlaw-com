@@ -227,9 +227,9 @@ p:last-child{margin-bottom:0}
   }
 }
 .hero-layout{
-  display:grid;grid-template-columns:1.12fr .78fr;
-  gap:clamp(2.5rem,5vw,5.5rem);align-items:center;
-  padding-block:clamp(3rem,7vw,5rem);
+  display:grid;grid-template-columns:1.2fr .8fr;
+  gap:clamp(2rem,4vw,4rem);align-items:center;
+  padding-block:clamp(3rem,6vw,4.5rem);
 }
 .hero-copy h1{font-size:var(--fs-display);letter-spacing:-.045em}
 .hero-copy .lede{margin:var(--s-4) 0 var(--s-5);color:#dbe4ef;max-width:54ch}
@@ -244,17 +244,30 @@ p:last-child{margin-bottom:0}
 .hero-trust span{display:flex;align-items:center;gap:.5rem}
 .hero-trust span::before{content:"◆";color:var(--gold-bright);font-size:.6em}
 
+/* Hero visual: the attorney's portrait with the citation card overlapping
+   its lower-left. The card is anchored bottom-left and the portrait top-right,
+   so the overlap falls across the suit rather than the face. */
+.hero-visual{
+  position:relative;justify-self:end;
+  width:100%;max-width:520px;min-height:510px;
+}
+.hero-portrait{
+  position:absolute;top:0;right:0;width:64%;margin:0;
+  border:5px solid #fff;box-shadow:var(--shadow-lg);background:#fff;
+}
+.hero-portrait img{width:100%;height:auto;display:block}
+
 /* Citation capture card — the highest-intent conversion path on the page. */
 .citation-card{
-  background:#fff;color:var(--ink);padding:clamp(1.75rem,3vw,2.5rem);
+  position:absolute;left:0;bottom:0;z-index:2;width:74%;
+  background:#fff;color:var(--ink);padding:clamp(1.4rem,2.2vw,1.9rem);
   box-shadow:var(--shadow-lg);border-top:3px solid var(--gold);
-  max-width:420px;justify-self:end;width:100%;
 }
-.citation-card h2{font-size:clamp(1.6rem,1.2rem + 1.2vw,2.05rem);margin-bottom:var(--s-3)}
+.citation-card h2{font-size:clamp(1.4rem,1.1rem + .9vw,1.8rem);margin-bottom:var(--s-3)}
 .citation-card ul{list-style:none;padding:0;margin:0 0 var(--s-4)}
 .citation-card li{
-  position:relative;padding:.5rem 0 .5rem 1.75rem;
-  color:var(--muted);font-size:.95rem;
+  position:relative;padding:.4rem 0 .4rem 1.6rem;
+  color:var(--muted);font-size:.92rem;
 }
 .citation-card li::before{
   content:"";position:absolute;left:0;top:1.05rem;
@@ -460,6 +473,17 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .aside-phone:hover{text-decoration:underline}
 .contact-form.stacked{grid-template-columns:1fr;gap:var(--s-2)}
 
+/* Six nav items plus the phone and CTA stop fitting before the mobile
+   breakpoint; "Practice Areas" wraps and stretches the whole row. */
+@media (max-width:1150px) and (min-width:901px){
+  .site-nav{gap:1.05rem;font-size:.86rem}
+  .site-nav a{white-space:nowrap}
+  .nav-actions{gap:.8rem}
+  .nav-actions .button{padding:.85rem 1.15rem;font-size:.84rem;min-height:46px}
+  .phone{font-size:.86rem}
+  .brand img{height:46px}
+}
+
 @media (max-width:1080px){
   .page-layout{grid-template-columns:1fr}
   .page-aside{position:static;max-width:560px}
@@ -523,7 +547,14 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 /* --- 12. Responsive ------------------------------------------------------ */
 @media (max-width:1080px){
   .hero-layout{grid-template-columns:1fr;gap:var(--s-5)}
-  .citation-card{max-width:none;justify-self:stretch}
+  /* Overlap needs width it no longer has — lay them out side by side instead. */
+  .hero-visual{
+    position:static;max-width:none;min-height:0;
+    display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+    gap:var(--s-4);align-items:center;
+  }
+  .hero-portrait{position:static;width:100%}
+  .citation-card{position:static;width:100%}
   .footer-grid{grid-template-columns:1fr 1fr;gap:var(--s-4)}
 }
 
@@ -570,6 +601,8 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 @media (max-width:560px){
   /* <picture> swaps to the wreath mark alone below 560px */
   .brand img{height:42px}
+  .hero-visual{grid-template-columns:1fr;gap:var(--s-3)}
+  .hero-portrait{max-width:260px;margin-inline:auto}
   .contact-form{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}
   .button-row{display:grid}
