@@ -39,6 +39,65 @@ IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 VIDEO_EXT = {".mp4", ".mov", ".m4v", ".avi", ".webm", ".mkv"}
 
 
+def dimensions(path):
+    """Read pixel dimensions from a PNG or JPEG header.
+
+    Pure stdlib on purpose — this repo has no build step and no dependencies,
+    and adding Pillow just to read two integers is not worth it.
+    Returns (width, height) or None.
+    """
+    try:
+        with open(path, "rb") as fh:
+            head = fh.read(26)
+            if head[:8] == b"\x89PNG\r\n\x1a\n" and head[12:16] == b"IHDR":
+                return (int.from_bytes(head[16:20], "big"),
+                        int.from_bytes(head[20:24], "big"))
+            if head[:2] == b"\xff\xd8":
+                fh.seek(2)
+                while True:
+                    marker = fh.read(2)
+                    if len(marker) < 2 or marker[0] != 0xFF:
+                        return None
+                    # SOF0-SOF15, excluding the non-frame markers
+                    if 0xC0 <= marker[1] <= 0xCF and marker[1] not in (0xC4, 0xC8, 0xCC):
+                        fh.read(3)
+                        h = int.from_bytes(fh.read(2), "big")
+                        w = int.from_bytes(fh.read(2), "big")
+                        return (w, h)
+                    length = int.from_bytes(fh.read(2), "big")
+                    if length < 2:
+                        return None
+                    fh.seek(length - 2, 1)
+    except OSError:
+        return None
+    return None
+
+
+# Placements people actually run, so a near-miss export gets caught.
+STANDARD_SIZES = {
+    (1080, 1920): "story / reel",
+    (1080, 1350): "feed portrait",
+    (1080, 1080): "feed square",
+    (1200, 628): "link / landscape",
+    (1200, 1200): "square",
+}
+
+
+def size_note(w, h):
+    if (w, h) in STANDARD_SIZES:
+        return None
+    # Find the standard size with the closest aspect ratio
+    ar = w / h
+    best, diff = None, 1e9
+    for (sw, sh), label in STANDARD_SIZES.items():
+        d = abs(ar - sw / sh)
+        if d < diff:
+            best, diff = (sw, sh, label), d
+    if diff < 0.02:
+        return f"closest standard size is {best[0]}x{best[1]} ({best[2]})"
+    return None
+
+
 def mb(path):
     return os.path.getsize(path) / (1024 * 1024)
 
@@ -162,8 +221,21 @@ def cmd_check(args):
             if ext in VIDEO_EXT:
                 problems.append(f"{rel}/creative/{f}: video committed to git ({size:.1f} MB) — "
                                 f"move it to R2 or a shared drive and link it in ad.md")
-            elif ext in IMAGE_EXT and size > MAX_IMAGE_MB:
-                problems.append(f"{rel}/creative/{f}: {size:.1f} MB exceeds the {MAX_IMAGE_MB} MB image limit — re-export it")
+            elif ext in IMAGE_EXT:
+                if size > MAX_IMAGE_MB:
+                    problems.append(f"{rel}/creative/{f}: {size:.1f} MB exceeds the {MAX_IMAGE_MB} MB image limit — re-export it")
+                dims = dimensions(path)
+                if dims:
+                    w, h = dims
+                    # A filename claiming a size it does not have is worse than
+                    # no size in the filename at all.
+                    claimed = re.search(r"(\d{3,4})\s*[xX\u00d7]\s*(\d{3,4})", f)
+                    if claimed and (int(claimed.group(1)), int(claimed.group(2))) != (w, h):
+                        problems.append(f"{rel}/creative/{f}: filename says "
+                                        f"{claimed.group(1)}x{claimed.group(2)} but the file is {w}x{h}")
+                    note = size_note(w, h)
+                    if note:
+                        notes.append(f"{rel}/creative/{f}: {w}x{h} is not a standard ad size — {note}")
             elif size > MAX_ANY_MB:
                 problems.append(f"{rel}/creative/{f}: {size:.1f} MB is too large to commit")
 
