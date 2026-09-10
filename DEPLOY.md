@@ -219,15 +219,36 @@ variables are readable by anyone with dashboard access.
 
 > **Set `NOTIFY_EMAIL` before launch — it is not optional any more.** The
 > function no longer writes lead details to the logs (they were readable by
-> anyone with dashboard access). The email fallback is now the *only* thing
-> between a Clio outage and a permanently lost enquiry. Without it, a failed
-> submission tells the visitor to call and keeps no record.
+> anyone with dashboard access). The email fallback is the *only* thing
+> between a Clio outage and a permanently lost enquiry, when it is bound —
+> see the caveat immediately below, since on this project it may not be.
 
-Also configure the `EMAIL` send binding in Cloudflare Email Service and verify
-the sender domain before testing. When Clio is unavailable or not yet
-configured, the function sends the intake inbox the lead details instead of
-writing them to logs. Citation uploads remain private in R2; the fallback email
-contains their object keys rather than attachments.
+**The `EMAIL` send binding cannot go in `wrangler.toml`.** A Pages build
+rejects it outright: *"Configuration file for Pages projects does not
+support 'send_email'."* Try adding it instead through **Settings → Bindings
+→ Add** in the dashboard, choosing an Email binding if one is offered for
+Pages Functions on this account.
+
+**If that option is not there, this fallback cannot be wired up on Pages as
+it stands**, and `functions/api/lead.js` already treats it as optional (it
+checks `env.EMAIL` before using it) — the site runs fine without it, a failed
+submission just falls back to the honest "please call" message it always
+showed, with the full lead visible in that deployment's Function logs rather
+than emailed. Closing that gap would mean moving `lead.js` to a standalone
+Cloudflare Worker instead of a Pages Function, which does support Email
+Workers today; worth doing before relying on this in production, not
+required to launch.
+
+The same applies to `LEAD_RATE_LIMITER` (per-IP throttling) — also rejected
+from `wrangler.toml` on this project, also optional in the code, also a
+Worker-only feature if the dashboard doesn't offer it for Pages. The
+honeypot and minimum-fill-time checks still run without it.
+
+Once bound (by whichever route works), also configure and verify the sender
+domain in Cloudflare Email Service. When Clio is unavailable or not yet
+configured, the function sends the intake inbox the lead details instead.
+Citation uploads remain private in R2; the fallback email contains their
+object keys rather than attachments.
 
 **Redeploy after adding variables.** They are read at request time, but the
 deployment must be re-triggered to pick up new bindings: **Deployments →

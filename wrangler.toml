@@ -10,21 +10,19 @@ pages_build_output_dir = "."
 binding = "UPLOADS"
 bucket_name = "jayhutchlaw-uploads"
 
-# Limit each visitor to three intake attempts per minute. The namespace ID is
-# intentionally unique to this project and must not be reused by another Worker.
-[[ratelimits]]
-name = "LEAD_RATE_LIMITER"
-namespace_id = "7331001"
-
-  [ratelimits.simple]
-  limit = 3
-  period = 60
-
-# Configure and verify the sender domain in Cloudflare Email Service, then set
-# NOTIFY_EMAIL and NOTIFY_FROM_EMAIL in the Pages dashboard.
-[[send_email]]
-name = "EMAIL"
-
 [vars]
 CLIO_REGION = "us"
 # CLIO_GROW_TOKEN is a secret — never put it here.
+
+# --- Not declarable here -----------------------------------------------
+# A Pages build rejects both of these in wrangler.toml outright:
+#   - "Configuration file for Pages projects does not support 'send_email'"
+#   - "ratelimits": unexpected top-level field (warning, but never wired up)
+# functions/api/lead.js already treats both as optional (env.EMAIL and
+# env.LEAD_RATE_LIMITER are checked before use), so the site runs fine
+# without them - the email fallback and per-IP rate limit just stay off
+# until added another way:
+#   Settings -> Bindings -> Add, if the dashboard offers an Email Bindings
+#   or Rate Limiting option for Pages Functions on this account. If it does
+#   not, those two features may need a standalone Worker instead of a Pages
+#   Function - Workers support both today; Pages' feature set lags.
