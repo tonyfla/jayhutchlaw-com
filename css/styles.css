@@ -645,11 +645,11 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 /* --- 12. Responsive ------------------------------------------------------ */
 @media (max-width:1080px){
   .hero-layout{grid-template-columns:1fr;gap:var(--s-5)}
-  /* On narrower screens the portrait becomes its own short visual band.
-     It remains visible without competing with the headline or the form CTA. */
+  /* On narrower screens the portrait moves into normal document flow,
+     centered above the citation card, instead of floating behind it. */
   .hero-figure{
     position:relative;top:auto;right:auto;bottom:auto;justify-self:center;
-    width:min(46vw,340px);height:360px;overflow:hidden;
+    width:min(46vw,300px);
   }
   .hero-figure img{width:100%;height:auto;max-width:none}
   .citation-card{max-width:285px;justify-self:center}
@@ -713,7 +713,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
   .footer-grid{grid-template-columns:1fr}
   .button-row{display:grid}
   .hero-trust{gap:var(--s-1) var(--s-3);font-size:.8rem}
-  .hero-figure{width:min(74vw,280px);height:250px;margin-top:-.5rem}
+  .hero-figure{width:min(58vw,220px);margin-top:-.5rem}
   .hero-copy .citation-card{grid-template-columns:1fr;max-width:100%}
   .hero-copy .citation-card h2,.hero-copy .citation-card ul,.hero-copy .citation-card .button{grid-column:1;grid-row:auto}
   .hero-copy .citation-card ul{margin:0 0 var(--s-2)}
