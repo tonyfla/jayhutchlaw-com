@@ -62,32 +62,17 @@ def build_attorney():
     </div>
   </section>
 
-  <section class="section paper">
-    <div class="shell split">
-      <div>
-        <p class="eyebrow">Our vision</p>
-        <h2>Personal counsel. Purposeful advocacy.</h2>
-      </div>
-      <div>
-        <p class="lede">At Jay Hutch Law, we believe legal representation should be grounded in integrity, strategy, and a genuine commitment to the people we serve.</p>
-        <p>Founded by James Hutchins, the firm combines strong legal advocacy with a technology-driven approach designed to deliver efficient, responsive results. Our purpose is simple: protect your rights, advocate efficiently on your behalf, and stand beside you every step of the way.</p>
-      </div>
-    </div>
-  </section>
-
   <section class="section-tight">
     <div class="shell attorney-intro">
       <div>
         <p class="attorney-name">James Hutchins, <span>Esq.</span></p>
         <p class="attorney-role">Managing Attorney · Atlanta, Georgia</p>
 
-        <p>Mr. Hutchins founded the firm to practise law the way he believed it should be practised — with integrity, with a strategy built around the person rather than the file, and with the responsiveness people in difficult situations actually need.</p>
+        <p>At Jay Hutch Law, we believe legal representation should be grounded in integrity, strategy, and a genuine commitment to the people we serve. Mr. Hutchins founded the firm to practise law that way — with a strategy built around the person rather than the file, and with the responsiveness people in difficult situations actually need.</p>
 
         <p>Over the course of his career he has focused on immigration law, personal injury, and criminal defense. Whether guiding individuals through complex immigration processes, advocating for those injured through no fault of their own, or protecting the rights of clients facing DUI and traffic charges, he stays focused on practical, results-driven outcomes.</p>
 
-        <p>He works directly with each client to understand what happened, explain the options actually available, and pursue a sensible path forward. The firm pairs that attention with a technology-driven approach to intake and case management — which is what makes it possible to stay responsive without giving any matter less thought than it deserves.</p>
-
-        <p>The purpose is straightforward: protect your rights, advocate efficiently on your behalf, and stand beside you at every step.</p>
+        <p>He works directly with each client to understand what happened, explain the options actually available, and pursue a sensible path forward — and pairs that attention with a technology-driven approach to intake and case management, so no matter gets less thought than it deserves. The purpose is simple: protect your rights, advocate efficiently on your behalf, and stand beside you every step of the way.</p>
 
         <div class="detail-list">
           <div><b>⌖</b>Licensed in Georgia</div>
@@ -107,29 +92,23 @@ def build_attorney():
     </div>
   </section>
 
-  <section class="section paper">
-    <div class="shell">
-      <div class="section-head">
-        <p class="eyebrow">How the firm works</p>
-        <h2>Three things every client gets.</h2>
-      </div>
-      <div class="values">
-        <article class="value">
-          <b aria-hidden="true">◇</b>
-          <h3>Integrity</h3>
-          <p>Honest guidance and straightforward counsel, including when the answer is not the one you hoped for.</p>
-        </article>
-        <article class="value">
-          <b aria-hidden="true">▥</b>
-          <h3>Strategy</h3>
-          <p>An approach built around your circumstances and your goals, rather than a standard template.</p>
-        </article>
-        <article class="value">
-          <b aria-hidden="true">♧</b>
-          <h3>Responsiveness</h3>
-          <p>Direct attorney access and clear communication, so you are never guessing where things stand.</p>
-        </article>
-      </div>
+  <section class="section-tight paper">
+    <div class="shell values">
+      <article class="value">
+        <b aria-hidden="true">◇</b>
+        <p class="value-label">Integrity</p>
+        <p>Honest guidance and straightforward counsel, including when the answer is not the one you hoped for.</p>
+      </article>
+      <article class="value">
+        <b aria-hidden="true">▥</b>
+        <p class="value-label">Strategy</p>
+        <p>An approach built around your circumstances and your goals, rather than a standard template.</p>
+      </article>
+      <article class="value">
+        <b aria-hidden="true">♧</b>
+        <p class="value-label">Responsiveness</p>
+        <p>Direct attorney access and clear communication, so you are never guessing where things stand.</p>
+      </article>
     </div>
   </section>
 

@@ -402,6 +402,10 @@ p:last-child{margin-bottom:0}
 .value:last-child{border-right:0}
 .value b{font-size:1.9rem;color:var(--gold-deep);display:block;margin-bottom:var(--s-2)}
 .value h2,.value h3{font-size:1.4rem;margin-bottom:var(--s-1)}
+/* Non-heading equivalent — used where a heading tag would add to the page's
+   heading count without adding real document structure (e.g. three small
+   feature labels on a one-topic bio page). Same visual weight, same font. */
+.value-label{font:1.4rem var(--serif);margin:0 0 var(--s-1);color:var(--ink)}
 .value p{color:var(--muted);margin:0;font-size:.95rem}
 
 .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,5.5rem);align-items:center}
