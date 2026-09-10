@@ -152,7 +152,12 @@ R2 bucket bindings → Add**.
 The variable name must be exactly `UPLOADS` — that is what the function reads.
 
 - [ ] Bucket created, public access **off**
-- [ ] Binding added as `UPLOADS`
+- [ ] Binding added as `UPLOADS` — dashboard **and** `wrangler.toml`, both
+      required: Pages validates every binding declared in `wrangler.toml`
+      before it will publish the Function at all, so it has to name a bucket
+      that actually exists. `[[r2_buckets]]` is commented out there right
+      now for exactly this reason — uncomment it once the bucket exists, or
+      every deploy fails at the last step with "R2 bucket ... not found."
 
 ---
 

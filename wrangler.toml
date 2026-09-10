@@ -4,15 +4,27 @@ name = "jayhutchlaw"
 compatibility_date = "2026-09-09"
 pages_build_output_dir = "."
 
-# Citation attachments. Create the bucket before the first deploy:
-#   npx wrangler r2 bucket create jayhutchlaw-uploads
-[[r2_buckets]]
-binding = "UPLOADS"
-bucket_name = "jayhutchlaw-uploads"
-
 [vars]
 CLIO_REGION = "us"
 # CLIO_GROW_TOKEN is a secret — never put it here.
+
+# --- R2 (citation uploads) — deliberately not declared right now ----------
+# A Pages build validates every binding in this file before it will publish
+# the Function, so declaring [[r2_buckets]] here fails the whole deployment
+# outright until the bucket actually exists in the account. functions/api/
+# lead.js already treats it as optional (checks env.UPLOADS before use): a
+# form still submits and still reaches Clio Grow without this bound, only a
+# file attachment fails, with a per-file error rather than a crash.
+#
+# Before this matters for real (i.e. before launch, or to test uploads on
+# this deployment): create the bucket, then uncomment the block below and
+# add the same binding under Settings -> Bindings in the dashboard.
+#
+#   npx wrangler r2 bucket create jayhutchlaw-uploads
+#
+# [[r2_buckets]]
+# binding = "UPLOADS"
+# bucket_name = "jayhutchlaw-uploads"
 
 # --- Not declarable here -----------------------------------------------
 # A Pages build rejects both of these in wrangler.toml outright:
