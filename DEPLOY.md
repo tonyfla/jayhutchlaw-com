@@ -244,7 +244,7 @@ This is the whole point of doing DNS last. Test on the `.pages.dev` URL while
 the real site is still safely on Wix.
 
 - [ ] Homepage, a practice page, a guide, and `/upload-citation/` all load
-- [ ] Submit the homepage form with real details → lands on `/thank-you/`
+- [ ] Submit the `/contact/` form with real details → lands on `/thank-you/`
 - [ ] Rejected: `bad`, `a@b`, `name@example.c` · accepted: `name@gmail.com`
 - [ ] `name@gmial.com` offers "Did you mean name@gmail.com?" and one click fixes it
 - [ ] Rejected: `104-555-1234`, `911-555-1234`, `5555555555` · `4045551234`

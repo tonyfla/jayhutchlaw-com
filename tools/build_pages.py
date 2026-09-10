@@ -34,6 +34,7 @@ def head(title, description, path, extra_ld=None, robots="index,follow,max-image
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>(function(){{try{{var t=localStorage.getItem('jay-hutch-law-theme');if(t!=='light'&&t!=='dark'){{t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}}document.documentElement.dataset.theme=t}}catch(e){{}}}})();</script>
 
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(description)}">
@@ -78,14 +79,15 @@ def header(active=""):
     </button>
     <nav class="site-nav" id="site-nav" aria-label="Primary">
       <a href="/"{cls('home')}>Home</a>
-      <a href="/practice-areas/"{cls('practice')}>Practice Areas</a>
       <a href="/attorney/"{cls('attorney')}>Attorney</a>
+      <a href="/practice-areas/"{cls('practice')}>Practice Areas</a>
       <a href="/resources/"{cls('resources')}>Resources</a>
       <a href="/contact/"{cls('contact')}>Contact</a>
     </nav>
     <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">☾</button>
       <a class="phone" href="tel:{TEL}">☎ <span>855-HUTCHLAW</span></a>
-      <a class="button button-gold" href="/#consultation">Free Consultation</a>
+      <a class="button button-gold" href="/contact/">Free Consultation</a>
     </div>
   </div>
 </header>
@@ -175,7 +177,7 @@ def sidebar_form(page):
 """
 
 
-def footer():
+def footer(consult_target="/contact/"):
     links = "\n        ".join(
         f'<a href="/practice-areas/{p["slug"]}/">{html.escape(p["nav"])}</a>' for p in PAGES
     )
@@ -233,7 +235,7 @@ def footer():
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4.2-1L3 20l1.1-4.7A8.4 8.4 0 0 1 3 11.5a8.4 8.4 0 0 1 9-8.4 8.4 8.4 0 0 1 9 8.4z"/></svg>
     Text
   </a>
-  <a class="primary" href="#consult">
+  <a class="primary" href="{consult_target}">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
     Free Consult
   </a>
@@ -246,13 +248,13 @@ def footer():
 """
 
 
-def cta_band():
+def cta_band(consult_target="/contact/"):
     return f"""<section class="cta-band">
   <div class="shell">
     <p class="eyebrow eyebrow-light">Your matter deserves personal attention</p>
     <h2>Tell us what happened.</h2>
     <div class="button-row">
-      <a class="button button-gold button-lg" href="#consult">Request a Free Consultation</a>
+      <a class="button button-gold button-lg" href="{consult_target}">Request a Free Consultation</a>
       <a class="button button-ghost button-lg" href="tel:{TEL}">☎ Call {PHONE}</a>
     </div>
   </div>
@@ -322,7 +324,6 @@ def build_practice_page(page):
 
     related = "\n".join(
         f"""        <a class="practice-card" href="/practice-areas/{BY_SLUG[s]['slug']}/">
-          <span>{BY_SLUG[s]['num']}</span>
           <h3>{html.escape(BY_SLUG[s]['nav'])}</h3>
           <p>{html.escape(BY_SLUG[s]['lede'][:110].rsplit(' ', 1)[0])}…</p>
           <b>Learn more →</b>
@@ -343,7 +344,7 @@ def build_practice_page(page):
 
   <section class="page-hero-light">
     <div class="shell">
-      <p class="eyebrow">Practice area {page['num']}</p>
+      <p class="eyebrow">Practice area</p>
       <h1>{html.escape(page['h1'])}</h1>
       <p class="lede">{html.escape(page['lede'])}</p>
     </div>
@@ -386,9 +387,9 @@ def build_practice_page(page):
   </section>
 
 """
-        + cta_band()
+        + cta_band("#consult")
         + "</main>\n\n"
-        + footer()
+        + footer("#consult")
     )
 
 
@@ -423,7 +424,6 @@ def build_hub():
 
     cards = "\n".join(
         f"""        <a class="practice-card" href="/practice-areas/{p['slug']}/">
-          <span>{p['num']}</span>
           <h3>{html.escape(p['nav'])}</h3>
           <p>{html.escape(p['lede'][:130].rsplit(' ', 1)[0])}…</p>
           <b>Learn more →</b>
@@ -465,7 +465,7 @@ def build_hub():
       <div>
         <p class="lede">Many matters cross more than one of these areas, and some do not fit neatly into any of them. A short conversation is usually enough to work out what you are actually dealing with and what your options are.</p>
         <div class="button-row">
-          <a class="button button-gold button-lg" href="/#consultation">Request a Free Consultation</a>
+          <a class="button button-gold button-lg" href="/contact/">Request a Free Consultation</a>
           <a class="button button-outline button-lg" href="tel:{TEL}">☎ Call {PHONE}</a>
         </div>
       </div>

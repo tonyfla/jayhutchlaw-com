@@ -16,9 +16,9 @@ from build_pages import head, header, breadcrumb, footer, cta_band, write, BASE,
 from resources import GUIDES, HUB  # noqa: E402
 
 
-def footer_with_gate():
+def footer_with_gate(consult_target="/contact/"):
     """Guide pages also load resources.js (print support + the optional gate)."""
-    return footer().replace(
+    return footer(consult_target).replace(
         '<script src="/js/forms.js" defer></script>',
         '<script src="/js/forms.js" defer></script>\n<script src="/js/resources.js" defer></script>',
     )
@@ -43,7 +43,7 @@ def download_card(guide):
           </ul>
           <div class="button-row">
             <button class="button button-outline" type="button" data-print>Save or print this guide</button>
-            <a class="button button-gold" href="/#consultation">Discuss your situation</a>
+            <a class="button button-gold" href="/contact/">Discuss your situation</a>
           </div>
         </div>
       </div>
@@ -181,9 +181,9 @@ def build_guide(guide):
   </section>
 
 """
-        + cta_band()
+        + cta_band("#consult")
         + "</main>\n\n"
-        + footer_with_gate()
+        + footer_with_gate("#consult")
     )
 
 
@@ -255,7 +255,7 @@ def build_hub():
       <div>
         <p class="lede">Everything here describes how Georgia law generally works. Whether it applies to you depends on details a guide cannot know — the charge, the court, your record, and what actually happened.</p>
         <div class="button-row">
-          <a class="button button-gold button-lg" href="/#consultation">Request a Free Consultation</a>
+          <a class="button button-gold button-lg" href="/contact/">Request a Free Consultation</a>
           <a class="button button-outline button-lg" href="tel:{TEL}">☎ Call {PHONE}</a>
         </div>
       </div>

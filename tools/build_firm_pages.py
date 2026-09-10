@@ -42,21 +42,6 @@ ATTORNEY_LD = {
 
 
 def build_attorney():
-    # Built with a plain loop rather than a nested f-string: Python 3.9's
-    # f-string parser rejects the quoting this needs.
-    cards = []
-    for pa in PAGES:
-        blurb = pa["lede"][:105].rsplit(" ", 1)[0] + "\u2026"
-        cards.append(
-            '        <a class="practice-card" href="/practice-areas/%s/">\n'
-            '          <span>%s</span>\n'
-            '          <h3>%s</h3>\n'
-            '          <p>%s</p>\n'
-            '          <b>Learn more \u2192</b>\n'
-            '        </a>' % (pa["slug"], pa["num"], html.escape(pa["nav"]), html.escape(blurb))
-        )
-    practice_cards = "\n".join(cards)
-
     return (
         head(
             "James Hutchins, Esq. | Atlanta Attorney | Jay Hutch Law",
@@ -74,6 +59,19 @@ def build_attorney():
       <p class="eyebrow">The attorney</p>
       <h1>Meet James Hutchins, Esq.</h1>
       <p class="lede">Jay Hutch Law was founded on a simple belief: people deserve clear counsel and steady support during the moments that matter most.</p>
+    </div>
+  </section>
+
+  <section class="section paper">
+    <div class="shell split">
+      <div>
+        <p class="eyebrow">Our vision</p>
+        <h2>Personal counsel. Purposeful advocacy.</h2>
+      </div>
+      <div>
+        <p class="lede">At Jay Hutch Law, we believe legal representation should be grounded in integrity, strategy, and a genuine commitment to the people we serve.</p>
+        <p>Founded by James Hutchins, the firm combines strong legal advocacy with a technology-driven approach designed to deliver efficient, responsive results. Our purpose is simple: protect your rights, advocate efficiently on your behalf, and stand beside you every step of the way.</p>
+      </div>
     </div>
   </section>
 
@@ -98,7 +96,7 @@ def build_attorney():
         </div>
 
         <div class="button-row" style="margin-top:2rem">
-          <a class="button button-gold button-lg" href="/#consultation">Request a Free Consultation</a>
+          <a class="button button-gold button-lg" href="/contact/">Request a Free Consultation</a>
           <a class="button button-outline button-lg" href="tel:{TEL}">☎ Call {PHONE}</a>
         </div>
       </div>
@@ -135,20 +133,6 @@ def build_attorney():
     </div>
   </section>
 
-  <section class="section">
-    <div class="shell">
-      <div class="section-kicker">
-        <div>
-          <p class="eyebrow">Where the firm practises</p>
-          <h2>Areas Mr. Hutchins handles.</h2>
-        </div>
-        <a class="text-link" href="/practice-areas/">All practice areas →</a>
-      </div>
-      <div class="card-grid">
-{practice_cards}
-      </div>
-    </div>
-  </section>
 
         """
         + cta_band()
@@ -295,9 +279,9 @@ def build_citation():
   </section>
 
 """
-        + cta_band()
+        + cta_band("#consult")
         + "</main>\n\n"
-        + footer()
+        + footer("#consult")
     )
 
 
@@ -464,9 +448,9 @@ def build_contact():
   </section>
 
 """
-        + cta_band()
+        + cta_band("#consult")
         + "</main>\n\n"
-        + footer()
+        + footer("#consult")
     )
 
 

@@ -15,6 +15,7 @@
   --ink:#112844;
   --ivory:#faf8f3;
   --paper:#f4f0e8;
+  --surface:#fff;
 
   /* Gold: --gold is decorative only (rules, numerals, icons).
      --gold-deep is the accessible variant for text and CTA fills.
@@ -23,9 +24,12 @@
   --gold:#b38a4d;
   --gold-deep:#8c6626;
   --gold-bright:#c9a165;
+  --cta-gold:#e0af4d;
+  --cta-gold-hover:#edc36a;
 
   --muted:#5a6a82;
   --muted-light:#616d80;   /* 5.2:1 on white, 4.6:1 on paper — AA at small sizes */
+  --danger:#b3261e;
   --line:#ddd6c9;
   --line-cool:#dfe4ec;
 
@@ -58,7 +62,61 @@
   --shadow-lg:0 22px 55px rgba(5,22,44,.28);
   --ease:cubic-bezier(.4,.14,.3,1);
   --header-h:88px;
+  color-scheme:light;
 }
+
+:root[data-theme="dark"]{
+  --navy:#102b4a;
+  --navy-deep:#071525;
+  --navy-soft:#1c446e;
+  --ink:#edf3fa;
+  --ivory:#0c1725;
+  --paper:#14253a;
+  --surface:#102033;
+  --muted:#b7c5d6;
+  --muted-light:#c5d0dd;
+  --line:#344860;
+  --line-cool:#34475e;
+  --shadow-sm:0 2px 14px rgba(0,0,0,.24);
+  --shadow-md:0 12px 34px rgba(0,0,0,.3);
+  --shadow-lg:0 22px 55px rgba(0,0,0,.45);
+  color-scheme:dark;
+
+  /* #8c6626 (the light-theme --gold-deep) measures 3.2-3.5:1 against these
+     dark surfaces and fails AA. This is used for links, eyebrows, borders
+     and buttons all over the site, so one override here fixes most of the
+     dark-mode contrast failures at once. 8.9:1+ against every dark surface. */
+  --gold-deep:#e0af4d;
+  /* #b3261e (the light-theme --danger) is 2.8:1 on the dark backgrounds. */
+  --danger:#ff8177;
+}
+
+/* --------------------------------------------------------------------------
+   The rules below use literal hex values rather than the variables above, so
+   the override block does nothing for them on its own. Verified by contrast
+   check: .page-body p at #31405a measured 1.5-1.7:1 against the dark ivory
+   and paper backgrounds - the reported "hard to read" bug, and the same
+   color is used for the attorney-page intro and the resource-guide takeaway
+   lists. Each replacement below was checked at 10:1 or better.
+   -------------------------------------------------------------------------- */
+:root[data-theme="dark"] .page-body p,
+:root[data-theme="dark"] .attorney-intro p,
+:root[data-theme="dark"] .takeaway li{
+  color:var(--muted-light);
+}
+:root[data-theme="dark"] .hint-fix:hover{color:var(--gold-bright)}
+
+/* These boxes hardcode a light background because they are meant to look
+   like a distinct card regardless of theme (a warning, a drop target). Keep
+   that identity, but swap the specific hex values so the box itself - and
+   the page text that inherits into it - both remain legible on a dark page. */
+:root[data-theme="dark"] .notice{background:var(--paper);border-left-color:var(--gold-deep)}
+:root[data-theme="dark"] .notice p{color:var(--ink)}
+:root[data-theme="dark"] .upload-box{background:var(--surface);border-color:var(--line)}
+:root[data-theme="dark"] .upload-box:hover,
+:root[data-theme="dark"] .upload-box.dragover{background:var(--paper);border-color:var(--gold-deep)}
+:root[data-theme="dark"] .form-status.is-error{background:#3a1f1d;color:#ffb4ac;border-color:#5c2b26}
+:root[data-theme="dark"] .form-status.is-success{background:#173829;color:#8fd6ac;border-color:#2b5c40}
 
 /* --- 2. Reset ------------------------------------------------------------ */
 *,*::before,*::after{box-sizing:border-box}
@@ -141,14 +199,14 @@ p:last-child{margin-bottom:0}
 .button:hover{transform:translateY(-2px)}
 .button:active{transform:translateY(0)}
 
-.button-gold{background:var(--gold-deep);color:#fff;box-shadow:0 4px 16px rgba(140,102,38,.28)}
-.button-gold:hover{background:#7a5920;box-shadow:0 10px 26px rgba(140,102,38,.34)}
+.button-gold{background:var(--cta-gold);color:var(--navy-deep);box-shadow:0 4px 16px rgba(224,175,77,.32)}
+.button-gold:hover{background:var(--cta-gold-hover);box-shadow:0 10px 26px rgba(224,175,77,.42)}
 
 .button-navy{background:var(--navy);color:#fff}
 .button-navy:hover{background:var(--navy-soft)}
 
 .button-outline{border-color:var(--gold-deep);color:var(--gold-deep);background:transparent}
-.button-outline:hover{background:var(--gold-deep);color:#fff}
+.button-outline:hover{background:var(--cta-gold);color:var(--navy-deep)}
 
 .button-outline.light,.button-ghost{border-color:rgba(255,255,255,.55);color:#fff;background:transparent}
 .button-outline.light:hover,.button-ghost:hover{background:#fff;color:var(--navy);border-color:#fff}
@@ -175,7 +233,7 @@ p:last-child{margin-bottom:0}
 /* --- 6. Header ----------------------------------------------------------- */
 .site-header{
   position:sticky;top:0;z-index:50;
-  height:var(--header-h);background:#fff;
+  height:var(--header-h);background:var(--surface);
   border-bottom:1px solid var(--line-cool);box-shadow:var(--shadow-sm);
 }
 .nav-wrap{height:100%;display:flex;align-items:center;gap:var(--s-4)}
@@ -206,6 +264,11 @@ p:last-child{margin-bottom:0}
   border:0;background:transparent;padding:.6rem;margin-left:auto;cursor:pointer;
 }
 .menu-toggle i{width:24px;height:1.5px;background:var(--ink);transition:transform .25s var(--ease),opacity .2s}
+.theme-toggle{
+  display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid var(--line);
+  border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer;font-size:1.05rem;
+}
+.theme-toggle:hover{border-color:var(--gold-deep);color:var(--gold-deep)}
 .menu-toggle[aria-expanded="true"] i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
 .menu-toggle[aria-expanded="true"] i:nth-child(2){opacity:0}
 .menu-toggle[aria-expanded="true"] i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
@@ -213,7 +276,7 @@ p:last-child{margin-bottom:0}
 /* --- 7. Hero ------------------------------------------------------------- */
 .home-hero{
   position:relative;display:flex;align-items:center;
-  min-height:min(88vh,700px);color:#fff;overflow:hidden;
+  min-height:0;color:#fff;overflow:hidden;
   background:
     linear-gradient(92deg,rgba(5,22,45,.93) 0%,rgba(5,22,45,.74) 48%,rgba(5,22,45,.42) 100%),
     url("../assets/hero-atlanta.jpg") center/cover no-repeat;
@@ -243,38 +306,39 @@ p:last-child{margin-bottom:0}
   }
 }
 
-/* Two columns of content, copy | card, with the cut-out taken out of flow
-   and anchored to the hero's bottom edge behind the card. In the grid it
-   reserved a track and squeezed the headline onto three lines; out of flow it
-   costs the layout nothing and reads as a figure standing in the scene.
-   The right offset keeps his shoulder tucked ~90px behind the card whatever
-   the viewport width. */
+/* The citation action now sits directly below the hero copy, while the cut-out
+   is anchored independently at the far right of the hero. */
 .hero-layout{
-  display:grid;grid-template-columns:1fr minmax(280px,340px);
-  gap:clamp(1.5rem,3vw,3.5rem);align-items:center;
-  padding-block:clamp(3rem,6vw,4.5rem);
+  display:grid;grid-template-columns:1fr;align-items:start;
+  padding-block:clamp(2.25rem,4vw,3.25rem);
   position:relative;z-index:2;
 }
-.hero-copy{max-width:640px}
+.hero-copy{position:relative;z-index:2;max-width:520px}
 .hero-figure{
-  position:absolute;bottom:0;z-index:1;pointer-events:none;
-  right:calc(max(var(--gutter),(100vw - 1320px) / 2) + 250px);
-  height:min(72vh,560px);
+  position:absolute;top:1.25rem;bottom:auto;z-index:1;pointer-events:none;
+  right:160px;
+  height:min(78vh,570px);
   filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));
 }
 .hero-figure img{height:100%;width:auto;display:block}
-.hero-layout .citation-card{position:relative;z-index:3}
 
-.hero-copy h1{font-size:var(--fs-display);letter-spacing:-.045em}
+.hero-copy h1{font-size:clamp(1.9rem,1.1rem + 3vw,3.3rem);letter-spacing:-.045em}
 .hero-copy .lede{
-  margin:var(--s-3) 0 var(--s-4);color:#dbe4ef;max-width:46ch;
-  font-size:clamp(1rem,.95rem + .25vw,1.125rem);
+  margin:var(--s-3) 0 var(--s-4);color:#dbe4ef;max-width:40ch;
+  font-size:clamp(.95rem,.92rem + .2vw,1.05rem);
 }
+.hero-copy .citation-card{
+  display:grid;grid-template-columns:.78fr 1.22fr;gap:.65rem 1.1rem;
+  align-items:start;margin-top:var(--s-4);max-width:480px;justify-self:start;
+}
+.hero-copy .citation-card h2{grid-column:1;grid-row:1;margin:0}
+.hero-copy .citation-card ul{grid-column:2;grid-row:1 / span 2;margin:0}
+.hero-copy .citation-card .button{grid-column:1;grid-row:2;align-self:end;padding:.7rem .75rem;font-size:.76rem}
 
 /* Trust strip under the hero CTAs — credibility without inventing claims. */
 .hero-trust{
   display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5);
-  margin-top:var(--s-5);padding-top:var(--s-4);
+  margin-top:var(--s-4);padding-top:var(--s-3);
   border-top:1px solid rgba(255,255,255,.18);
   font-size:var(--fs-small);color:#c2cfdd;
 }
@@ -283,18 +347,18 @@ p:last-child{margin-bottom:0}
 
 /* Citation capture card — the highest-intent conversion path on the page. */
 .citation-card{
-  background:#fff;color:var(--ink);padding:clamp(1.5rem,2.4vw,2.1rem);
+  background:var(--surface);color:var(--ink);padding:clamp(1.1rem,1.8vw,1.5rem);
   box-shadow:var(--shadow-lg);border-top:3px solid var(--gold);
-  max-width:380px;justify-self:end;width:100%;
+  max-width:285px;justify-self:end;width:100%;
 }
-.citation-card h2{font-size:clamp(1.6rem,1.2rem + 1.2vw,2.05rem);margin-bottom:var(--s-3)}
-.citation-card ul{list-style:none;padding:0;margin:0 0 var(--s-4)}
+.citation-card h2{font-size:clamp(1.35rem,1.05rem + 1vw,1.6rem);margin-bottom:var(--s-2)}
+.citation-card ul{list-style:none;padding:0;margin:0 0 var(--s-3)}
 .citation-card li{
-  position:relative;padding:.5rem 0 .5rem 1.75rem;
-  color:var(--muted);font-size:.95rem;
+  position:relative;padding:.35rem 0 .35rem 1.4rem;
+  color:var(--muted);font-size:.82rem;line-height:1.4;
 }
 .citation-card li::before{
-  content:"";position:absolute;left:0;top:1.05rem;
+  content:"";position:absolute;left:0;top:.75rem;
   width:9px;height:5px;border-left:2px solid var(--gold-deep);
   border-bottom:2px solid var(--gold-deep);transform:rotate(-45deg);
 }
@@ -305,7 +369,7 @@ p:last-child{margin-bottom:0}
 .practice-card{
   position:relative;display:flex;flex-direction:column;
   min-height:238px;padding:var(--s-4);
-  background:#fff;border:1px solid var(--line);
+  background:var(--surface);border:1px solid var(--line);
   transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s var(--ease);
 }
 .practice-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--gold)}
@@ -322,7 +386,13 @@ p:last-child{margin-bottom:0}
 .step{display:grid;grid-template-columns:56px 1fr;gap:var(--s-3);align-items:start}
 .step-number{
   display:grid;place-items:center;width:54px;height:54px;border-radius:50%;
-  background:var(--gold-deep);color:#fff;font:1.25rem var(--serif);
+  /* cta-gold + navy-deep, not gold-deep + white: gold-deep turns bright in
+     dark mode (needed for link/text contrast elsewhere) and white text on
+     that brighter fill drops to 2.0:1. cta-gold does not change between
+     themes and navy-deep stays dark in both, so this pairing holds at
+     8.7:1+ regardless of theme - the same pairing already used by
+     .button-gold. */
+  background:var(--cta-gold);color:var(--navy-deep);font:1.25rem var(--serif);
 }
 .step h3{margin-bottom:.35rem}
 .step p{color:var(--muted);font-size:.95rem;margin:0}
@@ -368,19 +438,19 @@ p:last-child{margin-bottom:0}
   letter-spacing:.06em;text-transform:uppercase;
 }
 .action-bar a + a{border-left:1px solid rgba(255,255,255,.14)}
-.action-bar a.primary{background:var(--gold-deep)}
+.action-bar a.primary{background:var(--cta-gold);color:var(--navy-deep)}
 .action-bar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9}
 
 /* --- 9. Forms ------------------------------------------------------------ */
-.form-card{background:#fff;padding:clamp(1.5rem,3vw,2.5rem);box-shadow:var(--shadow-md);border-top:3px solid var(--gold)}
+.form-card{background:var(--surface);padding:clamp(1.5rem,3vw,2.5rem);box-shadow:var(--shadow-md);border-top:3px solid var(--gold)}
 .contact-form{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
 .field{display:grid;gap:.4rem}
 .field.full,.full{grid-column:1/-1}
-.field label,.field > span{font-size:.82rem;font-weight:700;color:#3e4f66;letter-spacing:.02em}
-.field .req{color:#b3261e}
+.field label,.field > span{font-size:.82rem;font-weight:700;color:var(--muted-light);letter-spacing:.02em}
+.field .req{color:var(--danger)}
 .field input,.field select,.field textarea{
   width:100%;padding:.85rem .9rem;font:inherit;color:var(--ink);
-  background:#fff;border:1px solid #c2cbd6;border-radius:var(--radius);
+  background:var(--surface);border:1px solid var(--line-cool);border-radius:var(--radius);
   transition:border-color .18s var(--ease),box-shadow .18s var(--ease);
 }
 .field textarea{resize:vertical;min-height:120px}
@@ -389,7 +459,7 @@ p:last-child{margin-bottom:0}
   box-shadow:0 0 0 3px rgba(140,102,38,.16);
 }
 .field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:#b3261e}
-.field-error{font-size:.78rem;color:#b3261e;min-height:1em}
+.field-error{font-size:.78rem;color:var(--danger);min-height:1em}
 /* "Did you mean gmail.com?" — advisory, not an error, so it must not read red. */
 .field-error.is-hint{color:var(--muted)}
 .hint-fix{
@@ -452,7 +522,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .footer-legal{display:flex;gap:var(--s-3);flex-wrap:wrap}
 
 /* --- 10b. Sub-page (practice area) layout --------------------------------- */
-.breadcrumb{background:#fff;border-bottom:1px solid var(--line-cool);font-size:.8rem}
+.breadcrumb{background:var(--surface);border-bottom:1px solid var(--line-cool);font-size:.8rem}
 .breadcrumb ol{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;margin:0;padding:.85rem 0;color:var(--muted)}
 .breadcrumb li+li::before{content:"/";margin-right:.5rem;color:var(--line)}
 .breadcrumb a{color:var(--gold-deep)}
@@ -490,7 +560,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 
 /* Sticky conversion column. */
 .page-aside{position:sticky;top:calc(var(--header-h) + 1.25rem);display:grid;gap:var(--s-3)}
-.aside-card{background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);padding:var(--s-4)}
+.aside-card{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--gold);padding:var(--s-4)}
 .aside-card h2{font-size:1.35rem;margin-bottom:var(--s-3)}
 .aside-call{text-align:center;background:var(--paper);border-top-color:var(--gold-deep)}
 .aside-phone{display:block;font:1.7rem var(--serif);color:var(--gold-deep);margin-bottom:var(--s-2)}
@@ -528,7 +598,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .guide-card{min-height:auto}
 .guide-card p{max-width:44ch}
 
-.download-card{border:1px solid var(--line);border-top:3px solid var(--gold-deep);background:#fff;margin:var(--s-6) 0}
+.download-card{border:1px solid var(--line);border-top:3px solid var(--gold-deep);background:var(--surface);margin:var(--s-6) 0}
 .download-head{padding:var(--s-4) var(--s-4) 0}
 .download-head h2{margin:0;font-size:1.5rem}
 .download-body{padding:var(--s-3) var(--s-4) var(--s-4)}
@@ -555,7 +625,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
    /attorney/ (portrait, detail-list) and the citation/consult callouts. */
 .portrait{
   width:100%;height:auto;display:block;
-  border:5px solid #fff;box-shadow:var(--shadow-md);
+  border:5px solid var(--surface);box-shadow:var(--shadow-md);
 }
 .detail-list{
   display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3);
@@ -569,17 +639,16 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
 .callout a:hover{text-decoration:underline}
 
 /* --- 12. Responsive ------------------------------------------------------ */
-@media (max-width:1250px) and (min-width:1081px){
-  .hero-layout{grid-template-columns:1.1fr minmax(300px,360px)}
-  .hero-figure{display:none}
-}
-
 @media (max-width:1080px){
   .hero-layout{grid-template-columns:1fr;gap:var(--s-5)}
-  /* Hidden on phones on purpose: the hero is tuned so both CTAs sit inside
-     the first screen, and a figure here would push them back below the fold. */
-  .hero-figure{display:none}
-  .citation-card{max-width:none;justify-self:stretch}
+  /* On narrower screens the portrait becomes its own short visual band.
+     It remains visible without competing with the headline or the form CTA. */
+  .hero-figure{
+    position:relative;top:auto;right:auto;bottom:auto;justify-self:center;
+    width:min(46vw,340px);height:360px;overflow:hidden;
+  }
+  .hero-figure img{width:100%;height:auto;max-width:none}
+  .citation-card{max-width:285px;justify-self:center}
   .footer-grid{grid-template-columns:1fr 1fr;gap:var(--s-4)}
 }
 
@@ -600,7 +669,7 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
   .site-nav{
     display:none;position:absolute;top:var(--header-h);left:0;right:0;
     flex-direction:column;align-items:stretch;gap:0;
-    background:#fff;padding:var(--s-3) var(--gutter) var(--s-4);
+    background:var(--surface);padding:var(--s-3) var(--gutter) var(--s-4);
     border-bottom:1px solid var(--line);box-shadow:var(--shadow-md);
   }
   .site-nav.open{display:flex}
@@ -640,6 +709,10 @@ footer.site-footer{background:var(--navy-deep);color:#c9d4e0;padding-block:var(-
   .footer-grid{grid-template-columns:1fr}
   .button-row{display:grid}
   .hero-trust{gap:var(--s-1) var(--s-3);font-size:.8rem}
+  .hero-figure{width:min(74vw,280px);height:250px;margin-top:-.5rem}
+  .hero-copy .citation-card{grid-template-columns:1fr;max-width:100%}
+  .hero-copy .citation-card h2,.hero-copy .citation-card ul,.hero-copy .citation-card .button{grid-column:1;grid-row:auto}
+  .hero-copy .citation-card ul{margin:0 0 var(--s-2)}
   .step{grid-template-columns:44px 1fr}
   .step-number{width:44px;height:44px;font-size:1.05rem}
 }

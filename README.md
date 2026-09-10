@@ -7,7 +7,9 @@ runs through a Pages Function that creates an Inbox Lead in **Clio Grow**.
 ## Structure
 
 ```
-index.html            single-page overview (hero, practice areas, firm, FAQ, form)
+index.html            homepage: hero (with citation upload CTA), process steps,
+                      closing CTA band. Practice areas, the attorney bio, the
+                      consultation form and the FAQ each live on their own page.
 practice-areas/       hub + six deep pages, generated from tools/
 attorney/             James Hutchins bio
 resources/            guide hub + 3 open, indexed articles
@@ -119,6 +121,23 @@ CAPTCHAs measurably reduce law-firm form completion.
 - **A failed submission must never show success.** The previous version of this
   site faked it, which loses leads silently.
 - **`--section-y`** is the single knob for vertical page rhythm.
+- **Dark mode is opt-in and persisted**, toggled by the ☾/☀ button in every
+  header (`.theme-toggle`, wired in `js/site.js`). It stamps
+  `data-theme="dark"` or `"light"` on `<html>`, remembered in `localStorage`
+  under `jay-hutch-law-theme` and falling back to `prefers-color-scheme` on a
+  first visit. A small inline script runs before the stylesheet loads (in
+  `head()` in `tools/build_pages.py`, and duplicated in the three hand-written
+  pages that skip that function — `index.html`, `thank-you/`, `404.html`) so
+  the correct theme applies before first paint. Skipping that duplication on a
+  new hand-written page means a visible flash of the wrong theme on load.
+- **Most colours are CSS custom properties for exactly this reason** — the
+  dark-theme block near the top of `styles.css` only overrides variables, so
+  anything painted with a literal hex value instead of a `var(--...)` is
+  invisible to it. `--danger` exists for this reason (form-field errors); if
+  you add a new hardcoded color for text or an interactive surface, either
+  route it through a variable or add it to the dark-theme override block and
+  verify contrast against `--ivory`, `--paper`, and `--surface` in that theme,
+  not just the light one.
 
 ## Regenerating pages
 

@@ -3,6 +3,35 @@
 (function () {
   'use strict';
 
+  /* --- Theme preference --- */
+  var themeKey = 'jay-hutch-law-theme';
+  var root = document.documentElement;
+  var savedTheme;
+  try { savedTheme = localStorage.getItem(themeKey); } catch (e) { savedTheme = null; }
+  root.dataset.theme = (savedTheme === 'light' || savedTheme === 'dark')
+    ? savedTheme
+    : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  var themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    function activeTheme() {
+      return root.dataset.theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+    function updateThemeToggle() {
+      var isDark = activeTheme() === 'dark';
+      themeToggle.textContent = isDark ? '☀' : '☾';
+      themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      themeToggle.title = themeToggle.getAttribute('aria-label');
+    }
+    updateThemeToggle();
+    themeToggle.addEventListener('click', function () {
+      var next = activeTheme() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem(themeKey, next); } catch (e) { /* Preference remains for this visit. */ }
+      updateThemeToggle();
+    });
+  }
+
   /* --- Mobile navigation --- */
   var toggle = document.querySelector('.menu-toggle');
   var nav = document.querySelector('.site-nav');
