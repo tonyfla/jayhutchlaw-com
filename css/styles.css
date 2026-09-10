@@ -259,19 +259,30 @@ p:last-child{margin-bottom:0}
 .phone{color:var(--gold-deep);font-weight:700;white-space:nowrap;font-size:.95rem}
 .phone:hover{text-decoration:underline}
 
+/* A bare hamburger tests poorly for discoverability - people scan past an
+   unlabeled icon, especially sandwiched between two other icon-only buttons
+   (theme toggle, phone). The visible "Menu" text is the fix; it swaps to
+   "Close" when open via the aria-expanded attribute the JS already sets, so
+   no script change was needed for that part. */
 .menu-toggle{
-  display:none;flex-direction:column;gap:5px;
-  border:0;background:transparent;padding:.6rem;margin-left:auto;cursor:pointer;
+  display:none;align-items:center;gap:.5rem;min-height:44px;
+  border:0;background:transparent;padding:.5rem .65rem;margin-left:auto;cursor:pointer;
+  color:var(--ink);
 }
-.menu-toggle i{width:24px;height:1.5px;background:var(--ink);transition:transform .25s var(--ease),opacity .2s}
+.menu-toggle-icon{display:flex;flex-direction:column;gap:5px}
+.menu-toggle-icon i{width:22px;height:1.5px;background:var(--ink);display:block;transition:transform .25s var(--ease),opacity .2s}
+.menu-toggle-label{font-size:.78rem;font-weight:700;letter-spacing:.02em}
+.menu-toggle-label .is-open{display:none}
+.menu-toggle[aria-expanded="true"] .menu-toggle-label .is-closed{display:none}
+.menu-toggle[aria-expanded="true"] .menu-toggle-label .is-open{display:inline}
 .theme-toggle{
   display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid var(--line);
   border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer;font-size:1.05rem;
 }
 .theme-toggle:hover{border-color:var(--gold-deep);color:var(--gold-deep)}
-.menu-toggle[aria-expanded="true"] i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-.menu-toggle[aria-expanded="true"] i:nth-child(2){opacity:0}
-.menu-toggle[aria-expanded="true"] i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon i:nth-child(2){opacity:0}
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 /* --- 7. Hero ------------------------------------------------------------- */
 .home-hero{
